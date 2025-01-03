@@ -9,3 +9,9 @@
   height: 200px;
   width: 200px;
 }
+
+.features-link {
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}

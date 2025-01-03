@@ -6,25 +6,28 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-color-primary: #f7c142; /* Gold for treasure */
+  --ifm-color-primary-dark: #d6a336; /* Darker gold */
+  --ifm-color-primary-darker: #b7892b; /* Even darker gold */
+  --ifm-color-primary-darkest: #916e23; /* Deep mining gold */
+  --ifm-color-primary-light: #ffc857; /* Light gold for highlights */
+  --ifm-color-primary-lighter: #ffe27a; /* Softer golden yellow */
+  --ifm-color-primary-lightest: #ffed99; /* Faint gold shimmer */
+
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(255, 235, 153, 0.1); /* Soft gold highlight */
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
+/* Dark Mode Theme */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  
+  --ifm-color-primary: #8bc34a; /* Nature green */
+  --ifm-color-primary-dark: #7aa83e; /* Dark forest green */
+  --ifm-color-primary-darker: #6a8f34; /* Deep earthy green */
+  --ifm-color-primary-darkest: #58732a; /* Mining forest green */
+  --ifm-color-primary-light: #9fda63; /* Light verdant green */
+  --ifm-color-primary-lighter: #b5e47e; /* Soft leafy green */
+  --ifm-color-primary-lightest: #c9ef9a; /* Misty green shimmer */
+
+  --docusaurus-highlighted-code-line-bg: rgba(139, 195, 74, 0.3); /* Vibrant green overlay */
 }
