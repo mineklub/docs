@@ -26,7 +26,7 @@ export default function Home(): JSX.Element {
   return (
     <Layout
       title={`Docs - Mineclub.dk`}
-      description="Description will go into a meta tag in <head />">
+      description="Mineclub.dk dokumentation">
       <HomepageHeader />
       <main>
         <HomepageFeatures />
