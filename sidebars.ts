@@ -27,10 +27,17 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Skript',
       items: [
-        'minepay/skript/intro',
         'minepay/skript/events',
         'minepay/skript/expressions',
         'minepay/skript/effects',
+        {
+          type: 'category',
+          label: "Eksempler",
+          items: [
+            'minepay/skript/examples/butik',
+            'minepay/skript/examples/vote',
+          ]
+        }
       ]
     }
   ],

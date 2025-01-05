@@ -13,7 +13,8 @@ Disse events anvendes, når du har udviklet et produkt og sendt en forespørgsel
 * [mineclub] store request cancel online – Udløses, når en person logger på efter at have afvist købet.
 ### Placeholders
 Du kan bruge følgende placeholders i dit Skript til at arbejde med MinePay:
-* %event-player% - Den spiller der køber på din server.
+* %event-player% - Den spiller der køber på din server. (Bruges til online event)
+* %event-offlineplayer% - Den spiller der køber på din server. (Bruges til offline event)
 * %id of event-request% - Det unikke ID for købsforespørgslen.
 * %price of event-request% - Den samlede pris for alle produkter i forespørgslen.
 * %serverstatus of event-request% - Serverens status angiver, hvor købsforespørgslen befinder sig i processen. Som standard starter den i pending. Hvis du bruger accept request event-request, skifter status til accepted, og hvis du bruger cancel request event-request, ændres status til cancelled.
@@ -33,5 +34,6 @@ Disse events anvendes, når en person voter på din server.
 * [mineclub] vote online - Er når en person kommer online på din server efter at have votet på din server.
 ### Placeholders
 Du kan bruge følgende placeholders i dit Skript til at arbejde med MinePay:
-* %event-player% - Den spiller der voter på din server.
-
+* %event-player% - Den spiller der voter på din server. (Bruges til online event)
+* %event-offlineplayer% - Den spiller der voter på din server. (Bruges til offline event)
+* %id of event-vote% - Det unikke ID for voten.
