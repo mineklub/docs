@@ -1,8 +1,12 @@
+---
+title: Butik
+description: Eksempler på brug af MinePay Butik.
+---
+
 ```skript
 on store request accept:
     loop products of event-request:
-        loop metadata-keys of loop-product:
-            broadcast "&6[Butik] &f%event-offlineplayer% &7har lige købt ranket &b%title of loop-product% &7for &e⛃%price of loop-product%"
+        broadcast "&6[Butik] &f%event-offlineplayer% &7har lige købt ranket &b%title of loop-product% &7for &e⛃%price of loop-product%"
     accept request event-request
     
 on store request cancel:
