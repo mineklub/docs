@@ -16,8 +16,8 @@ on store request cancel:
 command /buyvip:
     trigger:
         set {_product} to new product
-        set title of {_product} to "VIP"
-        set id of {_product} to "VIP"
+        set mineclub title of {_product} to "VIP"
+        set mineclub id of {_product} to "VIP"
         set price of {_product} to 100.00
         set quantity of {_product} to 1
         set metadata-value "DATA" of {_product} to "whatever"
