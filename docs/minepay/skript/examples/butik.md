@@ -4,12 +4,12 @@ description: Eksempler på brug af MinePay Butik.
 ---
 
 ```skript
-on store request accept:
+on mineclub store request accept:
     loop products of event-request:
         broadcast "&6[Butik] &f%event-offlineplayer% &7har lige købt ranket &b%title of loop-product% &7for &e⛃%price of loop-product%"
     accept request event-request
     
-on store request cancel:
+on mineclub store request cancel:
     accept request event-request
 
 
