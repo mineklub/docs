@@ -1,0 +1,192 @@
+/* Starlight CSS Custom Properties */
+/* https://starlight.astro.build/guides/css-and-tailwind/ */
+
+/* ── Dark mode (default) — MineClub: dark bg, gold accent, green glow ── */
+:root {
+  /* Accent: gold (matching logo coins/text) */
+  --sl-color-accent-low: #3a2800;
+  --sl-color-accent: #e8a000;
+  --sl-color-accent-high: #ffd45e;
+
+  /* Logo green glow for decorative use */
+  --mc-glow: #22ff88;
+  --mc-glow-dim: rgba(34, 255, 136, 0.18);
+
+  /* Background: near-black, matching logo backdrop */
+  --sl-color-bg: #0c0e0f;
+  --sl-color-bg-nav: #080a0b;
+  --sl-color-bg-sidebar: #101315;
+  --sl-color-bg-inline-code: #1a1f22;
+  --sl-color-bg-accent: #1c1400;
+
+  /* Text */
+  --sl-color-text: #d8dde2;
+  --sl-color-text-accent: #ffd45e;
+  --sl-color-white: #f0f3f6;
+
+  /* Borders */
+  --sl-color-gray-1: #c8cdd3;
+  --sl-color-gray-2: #8e9399;
+  --sl-color-gray-3: #3a4048;
+  --sl-color-gray-4: #222830;
+  --sl-color-gray-5: #181d22;
+  --sl-color-gray-6: #101315;
+  --sl-color-black: #060809;
+
+  --sl-sidebar-width: 17rem;
+  --sl-font: 'Segoe UI', system-ui, sans-serif;
+  --sl-text-code-font: 'Cascadia Code', 'Fira Code', monospace;
+}
+
+/* ── Light mode — parchment/gold ── */
+[data-theme='light'] {
+  --sl-color-accent-low: #fceec8;
+  --sl-color-accent: #c07800;
+  --sl-color-accent-high: #6b4200;
+
+  --mc-glow: #2aaa60;
+  --mc-glow-dim: rgba(42, 170, 96, 0.15);
+
+  --sl-color-bg: #f8f5ee;
+  --sl-color-bg-nav: #ede8dc;
+  --sl-color-bg-sidebar: #f0ebe0;
+  --sl-color-bg-inline-code: #e8e0cc;
+  --sl-color-bg-accent: #fdf3d6;
+
+  --sl-color-text: #2a1f0a;
+  --sl-color-text-accent: #8a5000;
+  --sl-color-white: #1e1400;
+
+  --sl-color-gray-1: #3d2e10;
+  --sl-color-gray-2: #6b5528;
+  --sl-color-gray-3: #a8905c;
+  --sl-color-gray-4: #d4c49a;
+  --sl-color-gray-5: #e8dcbe;
+  --sl-color-gray-6: #f0ebe0;
+  --sl-color-black: #faf7ef;
+}
+
+/* ── Hero section ── */
+.hero {
+  padding-block: 4rem 3rem;
+}
+
+/* Logo image: circular with the same green glow as the logo backdrop */
+.hero img {
+  border-radius: 50%;
+  background: radial-gradient(circle, #0d1a10 60%, #000 100%);
+  padding: 0.5rem;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--mc-glow) 30%, transparent),
+    0 0 40px 8px var(--mc-glow-dim),
+    0 0 80px 16px color-mix(in srgb, var(--mc-glow) 8%, transparent);
+  transition: box-shadow 0.3s ease;
+}
+
+.hero img:hover {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--mc-glow) 55%, transparent),
+    0 0 55px 12px color-mix(in srgb, var(--mc-glow) 30%, transparent),
+    0 0 100px 24px color-mix(in srgb, var(--mc-glow) 12%, transparent);
+}
+
+/* Hero tagline */
+.hero .tagline {
+  color: var(--sl-color-gray-2);
+  font-size: 1.15rem;
+}
+
+/* Hero action buttons */
+.hero .action.primary {
+  background: linear-gradient(135deg, #e8a000, #ffcc44);
+  color: #1a0f00;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0 2px 16px color-mix(in srgb, #e8a000 40%, transparent);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.hero .action.primary:hover {
+  box-shadow: 0 4px 24px color-mix(in srgb, #e8a000 60%, transparent);
+  transform: translateY(-1px);
+}
+
+/* ── Sidebar ── */
+.sidebar-content {
+  border-inline-end: 1px solid var(--sl-color-gray-4);
+}
+
+/* Active sidebar link pill */
+a[aria-current='page'] {
+  border-radius: 0.375rem;
+}
+
+/* ── Content area ── */
+.content-panel {
+  border-top: 2px solid var(--sl-color-accent-low);
+}
+
+/* ── Headings — gold accent ── */
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3 {
+  color: var(--sl-color-text-accent);
+}
+
+.sl-markdown-content h2 {
+  border-bottom: 1px solid var(--sl-color-gray-4);
+  padding-bottom: 0.3em;
+}
+
+/* ── Inline code chips ── */
+.sl-markdown-content :not(pre) > code {
+  background: var(--sl-color-bg-inline-code);
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 0.25rem;
+  padding: 0.1em 0.35em;
+  font-size: 0.88em;
+  color: var(--sl-color-accent-high);
+}
+
+/* ── Code blocks ── */
+.sl-markdown-content pre {
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 0.5rem;
+}
+
+/* ── Cards (CardGrid) ── */
+.card {
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 0.5rem;
+  background: var(--sl-color-bg-sidebar);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  border-color: var(--sl-color-accent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--sl-color-accent) 35%, transparent),
+              0 0 40px color-mix(in srgb, var(--mc-glow) 8%, transparent);
+}
+
+/* ── Top navigation bar ── */
+header.header {
+  border-bottom: 2px solid var(--sl-color-accent-low);
+  background: var(--sl-color-bg-nav);
+}
+
+/* ── Search box ── */
+site-search button[data-open-modal] {
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 0.375rem;
+}
+
+/* ── Pagination (prev/next) ── */
+.pagination-links a {
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 0.375rem;
+  transition: border-color 0.2s;
+}
+
+.pagination-links a:hover {
+  border-color: var(--sl-color-accent);
+}

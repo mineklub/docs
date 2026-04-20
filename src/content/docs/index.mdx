@@ -1,0 +1,41 @@
+---
+title: MineClub Dokumentation
+description: Den officielle dokumentation for MineClub – en dansk Minecraft server skabt for alle aldre.
+template: splash
+hero:
+  tagline: En dansk Minecraft server skabt for alle aldre.
+  image:
+    file: ../../assets/logo.png
+  actions:
+    - text: Kom i gang
+      link: /minepay/intro/
+      icon: right-arrow
+      variant: primary
+    - text: GitHub
+      link: https://github.com/mineklub/docs
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Hvad kan du finde her?
+
+<CardGrid stagger>
+  <Card title="MinePay" icon="puzzle">
+    Integrer betalinger og votes på din Minecraft server med MinePay-pluginet.
+    [Læs mere →](/minepay/intro/)
+  </Card>
+  <Card title="Skript Integration" icon="document">
+    Brug MinePay direkte i dine Skript scripts via events, expressions og effects.
+    [Se dokumentation →](/minepay/skript/events/)
+  </Card>
+  <Card title="Eksempler" icon="open-book">
+    Klar-til-brug eksempler på butik og vote systemer til din server.
+    [Se eksempler →](/minepay/skript/examples/butik/)
+  </Card>
+  <Card title="Discord" icon="discord">
+    Har du spørgsmål? Kom ind på vores Discord og få hjælp.
+    [Besøg Discord →](https://discord.gg/gcHM29zNeG)
+  </Card>
+</CardGrid>
