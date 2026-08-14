@@ -1,0 +1,109 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import '../../styles/global.css';
+---
+<DocsLayout title="Guides" eyebrow="02 / Praktiske mønstre">
+  <p class="lead">Her samler vi de integrationer, du typisk bygger oven på MineCore.</p>
+  <h2>Event-livscyklus</h2>
+  <p class="lead">MineCore bruger events til at beskrive hele rejsen fra en request bliver bygget, til den er oprettet og modtaget af serveren. Votes følger deres egen modtagelsesflow.</p>
+
+  <h2>Det samlede flow</h2>
+  <div class="event-flow" aria-label="MineCore event-livscyklus">
+    <div class="event-step"><span>01</span><strong>PreCreateRequestEvent</strong><small>Før request oprettes</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="event-step"><span>02</span><strong>PostCreateRequestEvent</strong><small>Efter request er oprettet</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="event-step"><span>03</span><strong>ReceiveRequestEvent</strong><small>Serveren modtager request</small></div>
+  </div>
+  <div class="event-flow single"><div class="event-step"><span>VOTE</span><strong>ReceiveVoteEvent</strong><small>Serveren modtager et vote</small></div></div>
+
+  <h2>1. Før requesten oprettes</h2>
+  <p><code>PreCreateRequestEvent</code> bliver sendt med en <code>StoreRequest</code>, før requesten oprettes. Brug eventet til at validere eller stoppe requesten, hvis den ikke må sendes.</p>
+  <pre><code>public void onPreCreate(PreCreateRequestEvent event) &#123;
+    StoreRequest request = event.getStoreRequest();
+
+    if (!isAllowed(request)) &#123;
+        event.setCancelled(true);
+    &#125;
+&#125;</code></pre>
+  <p>Hvis eventet bliver annulleret, returnerer <code>callEvent()</code> <code>true</code>, og requesten bør ikke fortsætte.</p>
+
+  <h2>2. Efter requesten er oprettet</h2>
+  <p><code>PostCreateRequestEvent</code> bliver sendt, når requesten er oprettet. Her får du en <code>StoreCreatedRequest</code>, som indeholder den oprettede requests ID og kan gemmes til senere sporing.</p>
+  <pre><code>public void onPostCreate(PostCreateRequestEvent event) &#123;
+    StoreCreatedRequest request = event.getStoreRequest();
+    saveRequestId(request.getId());
+&#125;</code></pre>
+
+  <h2>3. Når serveren modtager en request</h2>
+  <p><code>ReceiveRequestEvent</code> betyder, at serveren har modtaget en request fra MineClub. Eventet har både en <code>type</code> og en <code>StoreCreatedRequest</code>. Brug typen til at skelne mellem request-typer, og udfør først belønningen, når requestens data er valideret.</p>
+  <pre><code>public void onReceiveRequest(ReceiveRequestEvent event) &#123;
+    StoreCreatedRequest request = event.getStoreRequest();
+
+    if ("purchase".equals(event.getType()) && isValid(request)) &#123;
+        giveProducts(request);
+        MineCoreApi.getInstance()
+            .getMinecoreRequestManager()
+            .acceptRequest(request);
+    &#125;
+&#125;</code></pre>
+  <p>Gem ikke belønningen som gennemført, før din egen behandling er lykkedes. Det gør det lettere at håndtere genforsøg uden at give den samme belønning flere gange.</p>
+
+  <h2>Samme livscyklus i Skript</h2>
+  <p>Skript-hook’et bruger de samme fire trin, men med Skript-events. Du kan derfor bygge requesten, reagere før og efter oprettelsen og til sidst håndtere den request eller det vote, serveren modtager.</p>
+  <div class="event-flow skript-flow" aria-label="MineCore Skript event-livscyklus">
+    <div class="event-step"><span>01</span><strong>pre create request</strong><small>Validér eller stop requesten</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="event-step"><span>02</span><strong>post create request</strong><small>Requesten er oprettet</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="event-step"><span>03</span><strong>receive request</strong><small>Giv købte produkter</small></div>
+  </div>
+  <div class="event-flow single skript-vote-flow"><div class="event-step"><span>VOTE</span><strong>receive vote</strong><small>Giv vote-belønningen</small></div></div>
+  <h3>Opret requesten</h3>
+  <pre><code>create a minecore request for player:
+    add product "my-product" named "My Product" price 10
+    add product "premium" named "Premium" price 20 quantity 1</code></pre>
+  <h3>Før requesten oprettes</h3>
+  <p>Brug <code>pre create request</code> til at kontrollere requesten, før den sendes. I en Skript-hook, der understøtter event-cancellation, kan du stoppe flowet med <code>cancel event</code>.</p>
+  <pre><code>on minecore pre create request:
+    if &lt;din validering fejler&gt;:
+        cancel event
+        log "MineCore request blev stoppet"</code></pre>
+  <h3>Efter requesten oprettes</h3>
+  <pre><code>on minecore post create request:
+    log "MineCore request blev oprettet"
+    log "Request: %event-request%"</code></pre>
+  <h3>Modtag køb og votes</h3>
+  <pre><code>on minecore receive request:
+    log "Modtog request: %event-type%"
+    accept minecore request event-request
+
+on minecore receive vote:
+    log "Modtog vote"
+    accept minecore vote event-vote</code></pre>
+  <p>Brug <code>event-request</code> og <code>event-vote</code> i accept-effects, når du vil markere den aktuelle request eller vote som behandlet. Kontrollér altid dine egne belønninger før accept, så genforsøg ikke giver dobbelt belønning.</p>
+
+  <h2>4. Når serveren modtager et vote</h2>
+  <p><code>ReceiveVoteEvent</code> indeholder et <code>MappedVote</code>. Giv spillerens vote-belønning, og kald derefter <code>acceptVote</code>. Hvis vote-data ikke kan behandles, skal du bruge <code>rejectVote</code>.</p>
+  <pre><code>public void onReceiveVote(ReceiveVoteEvent event) &#123;
+    MappedVote vote = event.getVote();
+
+    if (alreadyProcessed(vote)) &#123;
+        return;
+    &#125;
+
+    giveVoteReward(vote);
+    markAsProcessed(vote);
+    MineCoreApi.getInstance()
+        .getMinecoreRequestManager()
+        .acceptVote(vote);
+&#125;</code></pre>
+
+  <h2>Async event bus</h2>
+  <p>Event-klasserne sender sig selv via <code>MineCoreApi.getInstance().getAsyncEventBus().post(this)</code>. Behandl derfor handlers som asynkrone: undgå direkte Bukkit- eller world-operationer fra event-handleren, og hop over på serverens scheduler, når en handling kræver main thread.</p>
+  <p>Se <a href="/docs/api">API-reference</a> for eventernes felter og managers, eller <a href="/docs/skript">Skript-hooks</a> for den samme livscyklus i Skript.</p>
+  </DocsLayout>
+<style is:global>
+  .event-flow { display: flex; align-items: stretch; gap: 10px; margin: 28px 0 12px; }.event-flow.single { width: 235px; }.event-step { display: grid; flex: 1; min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }.event-step span { color: var(--accent); font: .68rem 'DM Mono', monospace; }.event-step strong { margin-top: 18px; color: var(--text); font-size: .88rem; line-height: 1.2; overflow-wrap: anywhere; }.event-step small { margin-top: 8px; color: var(--muted); font-size: .72rem; line-height: 1.35; }.flow-arrow { display: grid; place-items: center; color: var(--warm); font-size: 1.2rem; }
+  @media (max-width: 760px) { .event-flow { display: grid; grid-template-columns: 1fr; }.event-flow.single { width: 100%; }.flow-arrow { transform: rotate(90deg); } }
+</style>

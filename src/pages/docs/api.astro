@@ -1,0 +1,30 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import '../../styles/global.css';
+---
+<DocsLayout title="API-reference" eyebrow="03 / Java API">
+  <p class="lead">MineCore har en event-drevet API-model. Brug <code>MineCoreApi</code> til at hente managers og event bus, og lad Bukkit-events koble serverlogikken på.</p>
+  <h2>MineCoreApi</h2>
+  <p>Singleton-instansen er indgangen til API’et:</p>
+  <pre><code>MineCoreApi api = MineCoreApi.getInstance();
+api.getMinecoreRequestManager();
+api.getAsyncEventBus();</code></pre>
+  <p>API’et eksponerer også <code>getSocketIOManager()</code>, <code>getToken()</code>, <code>getGson()</code> og <code>shutdown()</code>.</p>
+  <h2>RequestManager</h2>
+  <p>Request-manageren kan hente, oprette, acceptere og annullere requests samt acceptere eller afvise votes:</p>
+  <pre><code>getRequests(GetRequestsOptions)
+createRequest(StoreRequest)
+acceptRequest(StoreCreatedRequest)
+cancelRequest(StoreCreatedRequest)
+acceptVote(MappedVote)
+rejectVote(MappedVote)
+getVotes(GetVotesOptions)</code></pre>
+  <h2>Bukkit-events</h2>
+  <ul><li><code>MineCorePreCreateRequestEvent</code> er cancellable og indeholder den request, der er ved at blive oprettet.</li><li><code>MineCorePostCreateRequestEvent</code> indeholder den oprettede request med ID.</li><li><code>MineCoreReceiveRequestEvent</code> indeholder request-type og <code>StoreCreatedRequest</code>.</li><li><code>MineCoreReceiveVoteEvent</code> indeholder en <code>MappedVote</code>.</li></ul>
+  <pre><code>@EventHandler
+public void onReceiveVote(MineCoreReceiveVoteEvent event) &#123;
+    MappedVote vote = event.getVote();
+    // Giv spilleren den relevante belønning.
+&#125;</code></pre>
+  <p>Se også <a href="/docs/guides">guiden til event listeners</a> og <a href="/docs/skript">Skript-hooks</a>.</p>
+</DocsLayout>

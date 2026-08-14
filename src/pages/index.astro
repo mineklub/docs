@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="MineCore" description="MineCore-dokumentation fra MineClub." home>
+  <section class="mineclub-hero">
+    <div class="hero-shade"></div>
+    <div class="hero-content">
+      <img class="hero-logo" src="/img/logo.png" alt="MineClub" />
+      <p class="hero-kicker">DANSK MINECRAFT-NETVÆRK</p>
+      <h1><span>MineCore</span><strong>DEVELOPER<br />DOCUMENTATION</strong></h1>
+      <p class="hero-copy">Byg, handl og konkurrér på tværs af MineClub. Integrér betalinger og votes direkte i din Paper-server.</p>
+      <div class="server-address">
+        <code>mc.mineclub.dk</code>
+        <button type="button" data-copy="mc.mineclub.dk">KOPIÉR <span aria-hidden="true">▣</span></button>
+      </div>
+      <p class="copy-note" data-copy-note>Kopiér adressen og tilføj den under Multiplayer i Minecraft.</p>
+      <div class="hero-actions">
+        <a class="hero-button" href="https://discord.mineclub.dk/">◈ &nbsp; DISCORD</a>
+        <a class="hero-button" href="https://mineclub.dk/butik">♧ &nbsp; SE SHOPPEN</a>
+      </div>
+    </div>
+    <a class="scroll-cue" href="#docs-links" aria-label="Se dokumentation">SCROLL <span>↓</span></a>
+  </section>
+  <section class="docs-links" id="docs-links">
+    <p class="section-kicker">MINECORE / DOKUMENTATION</p>
+    <h2>Alt du skal bruge<br /><em>til din server.</em></h2>
+    <div class="docs-link-grid">
+      <a href="/docs/kom-i-gang"><span>01</span><strong>Kom i gang</strong><small>Installation og første plugin</small><b>↗</b></a>
+      <a href="/docs/api"><span>02</span><strong>API-reference</strong><small>Events, requests og votes</small><b>↗</b></a>
+      <a href="/docs/skript"><span>03</span><strong>Skript-hooks</strong><small>MineCore uden Java</small><b>↗</b></a>
+    </div>
+  </section>
+</BaseLayout>
+<script>
+  const copyButton = document.querySelector<HTMLButtonElement>('[data-copy]');
+  const copyNote = document.querySelector<HTMLElement>('[data-copy-note]');
+  copyButton?.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(copyButton.dataset.copy ?? 'mc.mineclub.dk');
+    if (copyNote) copyNote.textContent = 'Kopieret. Tilføj adressen under Multiplayer i Minecraft.';
+    copyButton.textContent = 'KOPIERET ✓';
+  });
+</script>
+<style is:global>
+  .home-layout { background: #050911; }
+  .home-layout .site-header { position: absolute; z-index: 5; top: 0; left: 50%; width: min(1280px, calc(100% - 48px)); transform: translateX(-50%); border: 0; color: #f7f8f6; }
+  .home-layout .brand { color: #ffbf1c; text-transform: uppercase; }
+  .home-layout .brand img { width: 33px; height: 33px; }
+  .home-layout .brand small { display: none; }
+  .home-layout .main-nav { color: rgba(255,255,255,.72); font-size: .73rem; font-weight: 700; letter-spacing: .04em; }
+  .home-layout .main-nav a:hover, .home-layout .main-nav a:focus { color: #ffbd17; }
+  .home-layout .github-link { color: #fff !important; }
+  .mineclub-hero { position: relative; display: grid; min-height: min(820px, 100vh); place-items: center; overflow: hidden; background: url('https://mineclub.dk/brand/img/backgrounds/lagacy/doormcc.png') center / cover; color: #fff; }
+  .hero-shade { position: absolute; inset: 0; background: radial-gradient(circle at 50% 43%, rgba(7,18,15,.15), rgba(2,6,15,.58) 58%, #02050c 100%), linear-gradient(180deg, rgba(1,8,18,.72), rgba(3,8,14,.15) 42%, #050911 100%); }
+  .hero-content { position: relative; z-index: 1; width: min(610px, calc(100% - 32px)); padding-top: 70px; padding-bottom: 58px; text-align: center; }
+  .hero-logo { width: clamp(150px, 19vw, 235px); height: auto; filter: drop-shadow(0 15px 20px rgba(0,0,0,.38)); }
+  .hero-kicker, .section-kicker { margin: 16px 0 8px; color: #ffbd17; font: 700 .67rem 'DM Mono', monospace; letter-spacing: .16em; }
+  .hero-content h1 { margin: 0; line-height: .92; font-family: 'Space Grotesk', sans-serif; font-style: italic; text-transform: uppercase; }
+  .hero-content h1 span { display: block; margin-bottom: 6px; color: #fff; font-size: clamp(1.15rem, 2vw, 1.7rem); letter-spacing: .1em; }
+  .hero-content h1 strong { display: block; color: #ffbd17; font-size: clamp(2.8rem, 7vw, 5.7rem); letter-spacing: -.07em; }
+  .hero-copy { max-width: 510px; margin: 22px auto 26px; color: rgba(255,255,255,.8); font-size: .92rem; line-height: 1.5; }
+  .server-address { display: flex; width: min(335px, 100%); height: 51px; margin: 0 auto; padding: 5px; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,.22); border-radius: 12px; background: rgba(10,18,24,.64); box-shadow: 0 12px 30px rgba(0,0,0,.2); }
+  .server-address code { padding-left: 12px; color: #f6f7f4; font: .78rem 'DM Mono', monospace; }.server-address button { height: 39px; padding: 0 17px; border: 0; border-radius: 9px; color: #201704; background: #ffb912; font: 700 .68rem 'Space Grotesk', sans-serif; cursor: pointer; }.server-address button:hover { background: #ffd25a; }
+  .copy-note { margin: 8px 0 20px; color: rgba(255,255,255,.43); font-size: .62rem; }
+  .hero-actions { display: flex; justify-content: center; gap: 10px; }.hero-button { padding: 12px 21px; border: 1px solid rgba(255,255,255,.28); border-radius: 999px; color: #fff; background: rgba(15,22,32,.52); font-size: .69rem; font-weight: 700; text-decoration: none; }.hero-button:hover { border-color: #ffbd17; color: #ffbd17; }
+  .scroll-cue { position: absolute; z-index: 1; bottom: 10px; left: 50%; color: rgba(255,255,255,.55); font: .58rem 'DM Mono', monospace; letter-spacing: .18em; text-decoration: none; transform: translateX(-50%); }.scroll-cue span { display: block; margin-top: 5px; color: #ffbd17; text-align: center; font-size: 1rem; }
+  .docs-links { padding: 105px max(24px, calc((100% - 1060px) / 2)) 120px; color: #fff; background: #070d16; }.docs-links h2 { margin: 12px 0 38px; font-size: clamp(2.2rem, 5vw, 4.5rem); line-height: .95; letter-spacing: -.06em; }.docs-links h2 em { color: #ffbd17; font-style: normal; }.docs-link-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }.docs-link-grid a { position: relative; display: grid; min-height: 170px; padding: 22px; border: 1px solid #263445; border-radius: 14px; color: #fff; background: #0c1520; text-decoration: none; }.docs-link-grid a:hover { border-color: #ffbd17; transform: translateY(-3px); transition: .2s ease; }.docs-link-grid span { color: #ffbd17; font: .7rem 'DM Mono', monospace; }.docs-link-grid strong { align-self: end; font-size: 1.25rem; }.docs-link-grid small { color: #8c9aaa; }.docs-link-grid b { position: absolute; top: 20px; right: 20px; color: #ffbd17; font-size: 1.2rem; font-weight: 400; }
+  html[data-theme='light'] .home-layout { background: #edf2e9; }
+  html[data-theme='light'] .home-layout .site-header { color: #17231c; border-bottom-color: rgba(23,35,28,.12); }
+  html[data-theme='light'] .home-layout .main-nav { color: rgba(23,35,28,.68); }
+  html[data-theme='light'] .home-layout .github-link { color: #17231c !important; }
+  html[data-theme='light'] .home-layout .theme-toggle { color: #5d9e31; border-color: rgba(23,35,28,.18); background: rgba(255,255,255,.72); }
+  html[data-theme='light'] .home-layout .mineclub-hero { background-position: center; }
+  html[data-theme='light'] .home-layout .hero-shade { background: linear-gradient(180deg, rgba(238,244,236,.58), rgba(226,236,224,.28) 38%, rgba(237,242,233,.78) 100%), linear-gradient(90deg, rgba(239,245,238,.54), rgba(237,242,233,.08) 50%, rgba(239,245,238,.54)); }
+  html[data-theme='light'] .home-layout .hero-content h1 span { color: #17231c; text-shadow: 0 1px rgba(255,255,255,.8); }
+  html[data-theme='light'] .home-layout .hero-copy { color: #314137; }
+  html[data-theme='light'] .home-layout .server-address { border-color: rgba(23,35,28,.18); background: rgba(255,255,255,.78); box-shadow: 0 12px 30px rgba(48,72,47,.12); }
+  html[data-theme='light'] .home-layout .server-address code { color: #17231c; }
+  html[data-theme='light'] .home-layout .copy-note { color: rgba(23,35,28,.62); }
+  html[data-theme='light'] .home-layout .hero-button { border-color: rgba(23,35,28,.2); color: #17231c; background: rgba(255,255,255,.7); }
+  html[data-theme='light'] .home-layout .hero-button:hover { border-color: #5d9e31; color: #427c20; background: #fff; }
+  html[data-theme='light'] .home-layout .docs-links { color: #17231c; background: #edf2e9; }
+  html[data-theme='light'] .home-layout .docs-link-grid a { border-color: #cbd8c8; color: #17231c; background: rgba(255,255,255,.72); box-shadow: 0 8px 24px rgba(48,72,47,.06); }
+  html[data-theme='light'] .home-layout .docs-link-grid a:hover { border-color: #5d9e31; background: #fff; }
+  html[data-theme='light'] .home-layout .docs-link-grid small { color: #607064; }
+  @media (max-width: 700px) { .home-layout .site-header { width: calc(100% - 28px); }.home-layout .main-nav { gap: 8px; }.home-layout .main-nav a:nth-child(n+3) { display: none; }.mineclub-hero { min-height: 760px; }.hero-content { padding-top: 35px; }.hero-content h1 strong { font-size: clamp(2.5rem, 13vw, 4rem); }.docs-link-grid { grid-template-columns: 1fr; }.docs-links { padding-top: 70px; } }
+</style>

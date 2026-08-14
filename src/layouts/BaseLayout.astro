@@ -1,0 +1,62 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  home?: boolean;
+}
+
+const {title, description = 'Dansk dokumentation til MineCore for Paper-servere.', home = false} = Astro.props;
+const documentationNavigation = [
+  {label: 'Kom i gang', href: '/docs/kom-i-gang'},
+  {label: 'Guides', href: '/docs/guides'},
+  {label: 'API-reference', href: '/docs/api'},
+  {label: 'Skript', href: '/docs/skript'},
+];
+const homeNavigation = [
+  {label: 'HJEM', href: '/'},
+  {label: 'SERVER', href: '/docs/kom-i-gang'},
+  {label: 'BUTIK', href: 'https://mineclub.dk/butik'},
+  {label: 'GUIDES', href: '/docs/guides'},
+  {label: 'STAFFS', href: 'https://mineclub.dk/staffs'},
+];
+---
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{title} | MineCore</title>
+    <link rel="icon" href="/img/favicon.ico" />
+  </head>
+  <body class:list={{'home-layout': home}}>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="MineCore forsiden">
+        <img src="/img/logo.png" alt="" />
+        <span>MineCore <small>docs</small></span>
+      </a>
+      <nav class="main-nav" aria-label="Primær navigation">
+        {(home ? homeNavigation : documentationNavigation).map((item) => <a href={item.href}>{item.label}</a>)}
+        <a class="github-link" href="https://github.com/mineklub/minecore">{home ? 'MINECORE ↗' : 'GitHub ↗'}</a>
+        <button class="theme-toggle" type="button" aria-label="Skift farvetema" data-theme-toggle>◐</button>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div><strong>MineCore</strong><span>Åben infrastruktur til MineKlub.</span></div>
+      <div><a href="https://github.com/mineklub/minecore">Kildekode</a><a href="https://github.com/mineklub/minecore/blob/main/LICENSE">GPL-3.0</a></div>
+    </footer>
+    <script>
+      const button = document.querySelector('[data-theme-toggle]');
+      const stored = localStorage.getItem('theme');
+      document.documentElement.dataset.theme = stored ?? 'dark';
+      button?.addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem('theme', next);
+      });
+    </script>
+  </body>
+</html>

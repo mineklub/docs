@@ -1,0 +1,157 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import '../../styles/global.css';
+---
+<DocsLayout title="Java API-installation" eyebrow="02 / Java API">
+  <p class="lead">Denne guide viser, hvordan du bygger et Paper-plugin med MineCore Java API’et. Den følger strukturen i MineCore-repositoriets <a href="https://github.com/mineklub/MineCore/tree/dev/example">example-module</a>.</p>
+
+  <h2>1. Opret et Paper-plugin</h2>
+  <p>Dit plugin skal have en klasse, der arver fra <code>JavaPlugin</code>, og en <code>plugin.yml</code>. Eksemplet bruger <code>ExamplePlugin</code> som entrypoint.</p>
+  <pre><code>package dk.mineclub.minecore.example;
+
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ExamplePlugin extends JavaPlugin &#123;
+    @Override
+    public void onEnable() &#123;
+        getLogger().info("ExamplePlugin er startet");
+    &#125;
+&#125;</code></pre>
+
+  <h2>2. Tilføj MineCore API’et</h2>
+  <p>Eksemplet bruger Java 25-varianten af API’et. Vælg den artifact, der matcher din valgte Java target.</p>
+  <pre><code>dependencies &#123;
+    implementation("dk.mineclub.minecore:api-jvm25:0.1.1")
+    compileOnly("io.papermc.paper:paper-api:$paperApiVersion")
+&#125;</code></pre>
+  <p>MineCore-eksemplet bruger Gradle Kotlin DSL i <code>example/build.gradle.kts</code>. Det aktiverer også Shadow-plugin’et, så plugin-JAR’en kan bygges som en samlet distribution.</p>
+  <pre><code>plugins &#123;
+    id("java-library")
+    alias(libs.plugins.shadow)
+&#125;</code></pre>
+  <blockquote>Husk at gøre MineCore API’et tilgængeligt ved runtime. Du skal enten shade API’et ind i din egen plugin-JAR med Shadow, eller bruge MineCore som separat plugin og deklarere det som en soft dependency.</blockquote>
+  <p>Hvis MineCore leveres separat på serveren, kan dependency’en være <code>compileOnly</code>, så API’et ikke pakkes endnu en gang ind i dit plugin:</p>
+  <pre><code>dependencies &#123;
+    compileOnly("dk.mineclub.minecore:api-jvm25:0.1.1")
+&#125;</code></pre>
+
+  <h2>3. Konfigurér plugin.yml</h2>
+  <p>Opret <code>src/main/resources/plugin.yml</code>, og peg <code>main</code> på din <code>JavaPlugin</code>-klasse:</p>
+    <pre><code>name: "ExamplePlugin"
+main: "dk.mineclub.minecore.example.ExamplePlugin"
+version: "$&#123;version&#125;"</code></pre>
+  <p>Tilføj <code>softdepend</code>, når MineCore ligger som separat plugin i serverens <code>plugins/</code>-mappe:</p>
+  <pre><code>name: "ExamplePlugin"
+main: "dk.mineclub.minecore.example.ExamplePlugin"
+version: "$&#123;version&#125;"
+softdepend:
+  - MineCore</code></pre>
+  <p>Brug kun <code>softdepend</code>-modellen, hvis MineCore-plugin’et faktisk er installeret. Hvis du shader API’et ind i din egen JAR, skal du ikke gøre din plugin afhængig af en separat MineCore-installation.</p>
+
+  <h2>4. Hent MineCoreApi</h2>
+  <p>Eksemplet opretter en API-instans i <code>onEnable()</code> og registrerer derefter event-listeners på MineCore’s async event bus.</p>
+  <pre><code>public class ExamplePlugin extends JavaPlugin &#123;
+    public MineCoreApi api;
+
+    @Override
+    public void onEnable() &#123;
+        api = new MineCoreApi();
+        StoreListeners listeners = new StoreListeners(api, this);
+        api.getAsyncEventBus().register(listeners);
+    &#125;
+&#125;</code></pre>
+
+  <h2>5. Opret en request</h2>
+  <p>Eksemplets <code>BuyCommand</code> bygger et <code>StoreProduct</code>, lægger det i en <code>StoreRequest</code> og sender requesten gennem request-manageren.</p>
+  <pre><code>StoreProduct product = StoreProduct.builder()
+    .name("Example Product")
+    .id("example_product")
+    .price(1)
+    .quantity(1)
+    .build();
+
+StoreRequest request = StoreRequest.builder()
+    .storeProducts(new StoreProduct[] &#123;product&#125;)
+    .mcaccount(player.getUniqueId())
+    .build();
+
+plugin.api.getMinecoreRequestManager().createRequest(request);</code></pre>
+
+  <h2>6. Opret serverbetalinger</h2>
+  <p>MineCore Java API’et understøtter også serverbetalinger gennem <code>RequestManager</code>. En <code>ServerPayRequest</code> indeholder spillerens Minecraft-konto som tekst i <code>mcaccount</code> og beløbet i <code>amount</code>. Send requesten gennem <code>createServerPay</code>; metoden returnerer en <code>ServerPayResponse</code>, hvis kaldet lykkes.</p>
+  <pre><code>ServerPayRequest payRequest = ServerPayRequest.builder()
+    .mcaccount(player.getUniqueId().toString())
+    .amount(10.0)
+    .build();
+
+ServerPayResponse response =
+    plugin.api.getMinecoreRequestManager().createServerPay(payRequest);
+
+if (response != null) &#123;
+    plugin.getLogger().info("Serverbetaling oprettet");
+&#125;</code></pre>
+  <p>API’et serialiserer requesten til JSON og sender den til <code>/server/pay</code> med MineCore-tokenet. Hvis requesten er <code>null</code>, hvis svaret mangler, eller hvis kaldet fejler, returnerer <code>createServerPay</code> <code>null</code>.</p>
+  <pre><code>ServerPayRequest payRequest = ServerPayRequest.builder()
+    .mcaccount("player-uuid")
+    .amount(10.0)
+    .build();
+
+JsonObject json = payRequest.toJson();</code></pre>
+  <p>Brug altid <code>ServerPayRequest</code> og <code>ServerPayResponse</code> fra samme API-artifact som resten af dit plugin.</p>
+
+    <h2>7. Hent og håndtér votes</h2>
+    <p>Votes kan hentes gennem <code>RequestManager.getVotes</code>. Brug <code>GetVotesOptions</code> til at filtrere på spiller, status, side og antal resultater. <code>GetVotesResponse.getAll()</code> giver vote-listen, uanset om svaret er pagineret.</p>
+    <pre><code>GetVotesOptions options = GetVotesOptions.builder()
+    .mcaccount(player.getUniqueId().toString())
+    .page(1)
+    .limit(25)
+    .withMeta(true)
+    .build();
+
+  GetVotesResponse response =
+    plugin.api.getMinecoreRequestManager().getVotes(options);
+
+  if (response != null && response.getAll() != null) &#123;
+    for (MappedVote vote : response.getAll()) &#123;
+      plugin.getLogger().info("Vote: " + vote.getId());
+    &#125;
+  &#125;</code></pre>
+    <p>En <code>MappedVote</code> indeholder blandt andet <code>id</code>, <code>status</code>, <code>createdAt</code>, <code>updatedAt</code> og <code>mcaccount</code>. Når et modtaget vote er behandlet, markeres det med <code>acceptVote(vote)</code>. Brug <code>rejectVote(vote)</code>, hvis vote-data ikke kan behandles.</p>
+    <pre><code>MappedVote vote = event.getVote();
+
+  if (vote != null && processVote(vote)) &#123;
+    plugin.api.getMinecoreRequestManager().acceptVote(vote);
+  &#125; else if (vote != null) &#123;
+    plugin.api.getMinecoreRequestManager().rejectVote(vote);
+  &#125;</code></pre>
+
+    <h2>8. Håndtér events</h2>
+  <p>Registrér en klasse med Guava’s <code>@Subscribe</code>. MineCore’s example håndterer pre-create, post-create, modtagne requests og votes i samme listener:</p>
+  <pre><code>@Subscribe
+public void receiveEvent(ReceiveRequestEvent event) &#123;
+    StoreCreatedRequest request = event.getStoreRequest();
+    if (request == null) &#123;
+        return;
+    &#125;
+
+    processRequest(request);
+    mineCoreApi.getMinecoreRequestManager().acceptRequest(request);
+&#125;
+
+@Subscribe
+public void receiveVoteEvent(ReceiveVoteEvent event) &#123;
+    MappedVote vote = event.getVote();
+    processVote(vote);
+    mineCoreApi.getMinecoreRequestManager().acceptVote(vote);
+&#125;</code></pre>
+  <p>Se <a href="/docs/guides">event-livscyklus-guiden</a> for forskellen på de enkelte events og hvornår de kaldes.</p>
+
+  <h2>9. Byg og installér</h2>
+  <p>Kør buildet fra MineCore-projektets rod med Gradle wrapperen:</p>
+  <pre><code>./gradlew :example:build</code></pre>
+  <p>På Windows kan du bruge:</p>
+  <pre><code>.\\gradlew.bat :example:build</code></pre>
+  <p>Installér den byggede JAR fra <code>example/build/libs/</code> i Paper-serverens <code>plugins/</code>-mappe, og genstart serveren. Brug samme Java target til API-artifact, compile target og serverens JVM.</p>
+
+  <blockquote>API-eksemplet er baseret på MineCore’s <code>dev</code>-branch. Tjek altid den konkrete release, før du låser artifact-version og Paper API-version i dit eget plugin.</blockquote>
+</DocsLayout>

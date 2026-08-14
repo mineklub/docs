@@ -1,0 +1,20 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import '../../styles/global.css';
+---
+<DocsLayout title="Skript-hooks" eyebrow="05 / Uden Java">
+  <p class="lead">MineCore leverer hooks til Skript 2.2-dev36, 2.9.5, 2.13.2 og 2.15.3. Hook’et vælges automatisk efter din Skript- og Java-version.</p>
+  <h2>Opret en request</h2>
+  <pre><code>create a minecore request for player:
+    add product "my-product" named "My Product" price 10
+    add product "premium" named "Premium" price 20 quantity 1</code></pre>
+  <h2>Reagér på events</h2>
+  <pre><code>on minecore receive request:
+    log "Received: %event-type%"
+    accept minecore request event-request
+
+on minecore receive vote:
+    accept minecore vote event-vote</code></pre>
+  <h2>Versioner</h2>
+  <p>Skript 2.13.2, 2.9.5 og 2.15.3 bruger den moderne Section API. Skript 2.2-dev36 bruger en legacy-kompatibilitetslayer, men understøtter samme grundlæggende request- og vote-effects.</p>
+</DocsLayout>

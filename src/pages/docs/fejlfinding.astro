@@ -1,0 +1,13 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import '../../styles/global.css';
+---
+<DocsLayout title="Fejlfinding" eyebrow="06 / Når noget fejler">
+  <h2>Unsupported class file major version</h2>
+  <p>Fejlen betyder normalt, at JAR’en er bygget til en nyere Java-version end den JVM, serveren bruger. Kontrollér <code>java -version</code>, og hent eller byg MineCore med samme target.</p>
+  <h2>Hook’et bliver ikke indlæst</h2>
+  <p>Kontrollér Skript-versionen, Java-versionen og konsollen under serverstart. MineCore downloader hooks til <code>plugins/MineCore/hooks/</code> baseret på den registrerede version.</p>
+  <h2>En vote eller betaling giver ingen belønning</h2>
+  <p>Kontrollér, at den rigtige receive-event er registreret, at spillerens UUID kan findes, og at request eller vote bliver accepteret efter vellykket behandling.</p>
+  <p>Rapportér reproducerbare problemer i <a href="https://github.com/mineklub/minecore/issues">MineCore issues</a> med serverversion, Java-version og relevante konsollinjer.</p>
+</DocsLayout>
