@@ -1,6 +1,6 @@
 # MineCore docs
 
-Dansk dokumentation til [MineCore](https://github.com/mineklub/minecore), MineKlubs Paper-plugin til betalinger og votes.
+Dansk dokumentation til [MineCore](https://github.com/mineklub/minecore), MineClubs Paper-plugin til betalinger og votes.
 
 ## Lokal udvikling
 
