@@ -14,6 +14,8 @@ Byg sitet statisk med `npm run build`, eller se det byggede site med `npm run pr
 ## Indhold
 
 - [Kom i gang](https://docs.mineclub.dk/docs/kom-i-gang)
+- [Eksterne servere](https://docs.mineclub.dk/docs/eksterne-servere)
+- [Serveropsætning: Paper, Velocity og Waterfall](https://docs.mineclub.dk/docs/serveropsaetning)
 - [Installation](https://docs.mineclub.dk/docs/installation)
 - [API-reference](https://docs.mineclub.dk/docs/api)
 - [Skript-hooks](https://docs.mineclub.dk/docs/skript)

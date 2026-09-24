@@ -1,0 +1,128 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import '../../styles/global.css';
+---
+<DocsLayout title="Serveropsætning" description="Dansk opsætningsguide til Paper alene, Velocity med Paper og Waterfall med Paper." eyebrow="Servere / Hosting">
+  <p class="lead">Vælg én opsætning: <a href="#paper">Paper alene</a>, <a href="#velocity">Velocity med Paper</a> eller <a href="#waterfall">Waterfall med Paper</a>. Proxy-eksemplerne bruger én maskine med offentlig port 25565 og en Paper-backend på 127.0.0.1:25566.</p>
+  <p>Dette er selvstændige netværk med direkte spilleradgang. Ved forbindelse fra MineClub til din Velocity- eller Waterfall-proxy skal du bruge <strong>HAProxy</strong> og MineClubs sessionsadresse som beskrevet i <a href="/docs/eksterne-servere#velocity-haproxy">Velocity via MineClub</a> eller <a href="/docs/eksterne-servere#waterfall-haproxy">Waterfall via MineClub</a>. Indstillingerne for forbindelsen videre til Paper findes herunder.</p>
+
+  <h2 id="forberedelse">Før du begynder</h2>
+  <p>Du skal kunne redigere filer, køre Java og ændre netværksregler hos din udbyder. Brug separate mapper til Paper og proxyen. Tag backup af eksisterende serverfiler, stop processerne før ændringer, og ret de eksisterende nøgler i de genererede filer. Eksemplerne er udsnit, som skal flettes ind uden dublerede YAML-sektioner eller TOML-tabeller.</p>
+  <p>Kør i terminalen på servermaskinen:</p>
+  <pre><code>java -version</code></pre>
+  <p>Vælg Java efter den konkrete serverudgave. <a href="https://docs.papermc.io/paper/getting-started/">PaperMCs Java-oversigt</a> anbefaler Java 21 til Paper 1.20–1.21.11 og Java 25 til 26.1+. Den <a href="https://docs.papermc.io/velocity/getting-started/">aktuelle Velocity-guide</a> kræver Java 25. Ældre udgaver kan have andre krav; kontrollér udgaven før installation.</p>
+  <p>Startup-kommandoerne virker i terminalen på Windows, Linux og macOS. Kør dem fra den relevante mappe, brug de angivne JAR-navne eller tilpas filnavnet, og tilpas hukommelsen til din hostingplan.</p>
+
+  <h2 id="paper">Paper alene</h2>
+  <ol>
+    <li>Hent en passende serverudgave fra <a href="https://papermc.io/downloads/paper">Papers officielle downloads</a>, læg den i Paper-mappen, og omdøb filen til <code>paper.jar</code>.</li>
+    <li>Kør følgende kommando fra Paper-mappen for at generere serverfilerne.</li>
+  </ol>
+  <p><strong>Terminal — Paper-maskinen, Paper-mappen:</strong></p>
+  <pre><code>java -Xms1G -Xmx2G -jar paper.jar --nogui</code></pre>
+  <p>Læs Minecrafts EULA via linket i <code>eula.txt</code>. Hvis du accepterer den, ret <code>eula=false</code> til <code>eula=true</code>. Start igen med samme kommando, lad serveren generere verdenen, og skriv <code>stop</code> i konsollen før konfigurationsændringer.</p>
+  <p><strong>Paper-maskinen — <code>server.properties</code>:</strong></p>
+  <pre><code>server-ip=
+server-port=25565
+online-mode=true</code></pre>
+  <p>Behold proxy-understøttelse deaktiveret ved direkte spilleradgang: <code>settings.bungeecord: false</code> i <code>spigot.yml</code> og <code>proxies.velocity.enabled: false</code> i <code>config/paper-global.yml</code>. Se nedenfor for den ældre Paper-fil.</p>
+  <p>Start Paper igen. Tillad TCP-port 25565 i firewall og eventuelt routerens portvideresendelse. Brug din udbyders tildelte port, hvis den er en anden. Tilslut med Minecraft Java Edition til serverens offentlige adresse; lokalt på samme maskine kan du bruge <code>localhost:25565</code>.</p>
+  <p><strong>Kontrol:</strong> Du skal kunne logge ind med din almindelige Minecraft-konto og se det forventede navn og skin. Paper autentificerer selv spillerne med <code>online-mode=true</code>.</p>
+
+  <h2 id="velocity">Velocity med Paper</h2>
+  <p>Forbindelsen er <strong>spiller → Velocity:25565 → Paper:25566</strong>. Brug modern forwarding til en kompatibel Paper-udgave. Stop Paper fra det foregående afsnit først, så port 25565 bliver ledig.</p>
+  <h3>1. Opret proxyen</h3>
+  <p>Hent <a href="https://papermc.io/downloads/velocity">Velocity</a> til sin egen mappe som <code>velocity.jar</code>. Kør kommandoen, og stop derefter proxyen med <code>end</code>, når konfigurationen er oprettet.</p>
+  <p><strong>Terminal — proxy-maskinen, Velocity-mappen:</strong></p>
+  <pre><code>java -Xms512M -Xmx1G -jar velocity.jar</code></pre>
+  <p><strong>Proxy-maskinen — <code>velocity.toml</code>:</strong> Ret rodindstillingerne før den første tabel. Erstat eksempelserverne i <code>[servers]</code> med din lobby, og fjern eller tilpas genererede <code>[forced-hosts]</code>-henvisninger til servere, du ikke bruger.</p>
+  <pre><code>bind = "0.0.0.0:25565"
+online-mode = true
+player-info-forwarding-mode = "modern"
+forwarding-secret-file = "forwarding.secret"
+
+[servers]
+lobby = "127.0.0.1:25566"
+try = ["lobby"]</code></pre>
+  <h3>2. Konfigurér Paper-backenden</h3>
+  <p>Installér og generér Paper-filerne som i <a href="#paper">Paper-afsnittet</a>, hvis du ikke allerede har en server. Stop den før ændringer.</p>
+  <p><strong>Paper-maskinen — <code>server.properties</code>:</strong></p>
+  <pre><code>server-ip=127.0.0.1
+server-port=25566
+online-mode=false</code></pre>
+  <p><strong>Paper-maskinen — <code>spigot.yml</code>:</strong></p>
+  <pre><code>settings:
+  bungeecord: false</code></pre>
+  <p><strong>Paper-maskinen — <code>config/paper-global.yml</code>:</strong> Erstat pladsholderen med hele indholdet af proxyens genererede <code>forwarding.secret</code>. Behold nøglen privat.</p>
+  <pre><code>proxies:
+  velocity:
+    enabled: true
+    online-mode: true
+    secret: "INDSAET_DIN_VELOCITY_NOEGLE"</code></pre>
+  <p>Proxyen autentificerer spilleren; derfor er <code>online-mode</code> slået fra i backendens <code>server.properties</code>, men til i proxyen og i Papers Velocity-indstillinger.</p>
+  <p><strong>Ældre Paper:</strong> På 1.18.2 og ældre ligger disse indstillinger i <code>paper.yml</code> i stedet. Brug kun dette udsnit, hvis din udgave bruger den gamle fil:</p>
+  <pre><code>settings:
+  velocity-support:
+    enabled: true
+    online-mode: true
+    secret: "INDSAET_DIN_VELOCITY_NOEGLE"</code></pre>
+  <p>Modern forwarding kræver understøttelse i serverudgaven og virker ikke med Minecraft under 1.13. Se <a href="https://docs.papermc.io/velocity/player-information-forwarding/">PaperMCs forwarding-guide</a> for kompatibilitet og de officielle filindstillinger.</p>
+  <h3>3. Start og test</h3>
+  <p>Start først Paper, derefter Velocity med kommandoerne ovenfor. Tilslut til proxyens offentlige adresse på port 25565. Kontrollér login, skin og spillerens UUID i backendens log eller et administrationsplugin mod kontoens normale online-UUID. Test også <a href="#netvaerk">backend-afskærmningen</a>.</p>
+
+  <h2 id="waterfall">Waterfall med Paper</h2>
+  <p><a href="https://docs.papermc.io/">PaperMC betegner Waterfall som udfaset</a>. Brug Velocity til nye netværk. Dette afsnit er til eksisterende Waterfall-installationer og kræver en Paper- og klientversion, som din Waterfall-build understøtter.</p>
+  <h3>1. Opret eller klargør proxyen</h3>
+  <p>Brug <a href="https://papermc.io/downloads/waterfall">Waterfalls officielle downloadside</a> og kontrollér Java-kravet for din build i <a href="https://docs.papermc.io/waterfall/getting-started/">installationsguiden</a>. Læg <code>waterfall.jar</code> i en separat mappe. Stop andre processer på port 25565, kør kommandoen, og skriv <code>end</code>, når filerne er genereret.</p>
+  <p><strong>Terminal — proxy-maskinen, Waterfall-mappen:</strong></p>
+  <pre><code>java -Xms512M -Xmx512M -jar waterfall.jar</code></pre>
+  <p><strong>Proxy-maskinen — <code>config.yml</code>:</strong> Ret den eksisterende listener og serverliste; bevar øvrige indstillinger på din listener.</p>
+  <pre><code>online_mode: true
+ip_forward: true
+servers:
+  lobby:
+    address: 127.0.0.1:25566
+    motd: 'Min lobby'
+    restricted: false
+listeners:
+  - host: 0.0.0.0:25565
+    priorities:
+      - lobby
+    force_default_server: true
+    forced_hosts: &#123;&#125;
+    proxy_protocol: false</code></pre>
+  <p>Her modtager Waterfall almindelige klientforbindelser. <code>proxy_protocol</code> er derfor slået fra. Servernavnet i <code>priorities</code> skal findes under <code>servers</code>. Se <a href="https://www.spigotmc.org/wiki/bungeecord-configuration-guide/">BungeeCords konfigurationsreference</a> for de fælles indstillinger.</p>
+  <h3>2. Konfigurér Paper-backenden</h3>
+  <p>Generér Paper-filer og acceptér EULA som i <a href="#paper">Paper-afsnittet</a>. Stop Paper, og brug følgende backend-indstillinger.</p>
+  <p><strong>Paper-maskinen — <code>server.properties</code>:</strong></p>
+  <pre><code>server-ip=127.0.0.1
+server-port=25566
+online-mode=false</code></pre>
+  <p><strong>Paper-maskinen — <code>spigot.yml</code>:</strong></p>
+  <pre><code>settings:
+  bungeecord: true</code></pre>
+  <p><strong>Paper-maskinen — <code>config/paper-global.yml</code>:</strong></p>
+  <pre><code>proxies:
+  bungee-cord:
+    online-mode: true
+  velocity:
+    enabled: false</code></pre>
+  <p>På Paper 1.18.2 og ældre bruges <code>settings.bungee-online-mode: true</code> og <code>settings.velocity-support.enabled: false</code> i <code>paper.yml</code>. Proxyen skal stadig bruge <code>online_mode: true</code>.</p>
+  <h3>3. Start og test</h3>
+  <p>Start Paper og derefter Waterfall. Tilslut til proxyens offentlige adresse på port 25565, og kontrollér, at du lander på lobbyen med dit rigtige navn, skin og online-UUID. Legacy-forwarding har ingen indbygget hemmelig nøgle: gennemfør derfor også netværkskontrollen nedenfor.</p>
+
+  <h2 id="netvaerk">Backend-adgang og separate maskiner</h2>
+  <p>Ved proxy-opsætninger åbner du kun proxyens TCP-port 25565 for spillere. Eksemplernes <code>server-ip=127.0.0.1</code> gør Paper utilgængelig uden for samme maskines netværksmiljø. Fra en anden maskine skal et direkte forbindelsesforsøg til backendens offentlige adresse på port 25566 fejle, mens forbindelsen til proxyen virker.</p>
+  <p>På separate maskiner eller i separate containere peger <code>127.0.0.1</code> ikke på Paper fra proxyen. Brug backendens private adresse i proxyens serverliste og bind Paper til den relevante lokale grænseflade. Begræns backend-porten med firewall til proxyens kildeadresse, også for IPv6. Tillad ikke almindelige spillere direkte adgang til en backend med <code>online-mode=false</code>.</p>
+  <p>Hvis din hostingudbyder ikke lader dig afskærme en legacy-backend, skal adgangen sikres før åbning, eksempelvis med <a href="https://github.com/lucko/BungeeGuard">BungeeGuard</a> på proxy og backend. Se også <a href="https://docs.papermc.io/velocity/security/">PaperMCs vejledning om sikring af backend-servere</a>.</p>
+
+  <h2 id="fejlfinding">Fejlfinding og sidste kontrol</h2>
+  <ul>
+    <li><strong>Java-fejl ved start:</strong> Kontrollér <code>java -version</code> og kravet for hver JAR. Et hostingpanel kan bruge en anden Java-version end terminalen.</li>
+    <li><strong>Address already in use:</strong> To processer forsøger at bruge samme port. Proxyen bruger 25565, Paper-backenden 25566; kør kun én af de to proxyer.</li>
+    <li><strong>Connection refused eller timeout:</strong> Start Paper, kontrollér proxyens backend-adresse og port, og undersøg firewall eller container-netværk.</li>
+    <li><strong>Forwarding- eller nøglefejl:</strong> Match modern forwarding og secret på begge sider for Velocity. Match <code>ip_forward</code> og <code>settings.bungeecord</code> for Waterfall. Genstart begge processer efter ændringer.</li>
+    <li><strong>Forkert skin eller UUID:</strong> Kontrollér proxyens online-mode og hele forwarding-opsætningen, før spillere fortsætter. Forkerte UUID'er kan give andre spillerdata og rettigheder.</li>
+  </ul>
+  <p>Opsætningen er klar, når login via den tilsigtede adresse virker, backendens spilleridentitet er korrekt, og direkte ekstern backend-adgang er blokeret i proxy-opsætninger. Ved tilknytning til MineClub fortsætter du med <a href="/docs/eksterne-servere">registrering og godkendelse</a>.</p>
+</DocsLayout>

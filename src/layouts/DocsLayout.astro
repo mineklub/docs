@@ -10,6 +10,9 @@ interface Props {
 const {title, description, eyebrow = 'Dokumentation'} = Astro.props;
 const sections = [
   {label: 'Kom i gang', href: '/docs/kom-i-gang'},
+  {label: 'Eksterne servere', href: '/docs/eksterne-servere', children: [
+    {label: 'Serveropsætning', href: '/docs/serveropsaetning'},
+  ]},
   {label: 'Java API-installation', href: '/docs/installation'},
   {label: 'Livscyklus', href: '/docs/lifecycle'},
   {label: 'API-reference', href: '/docs/api'},
@@ -22,7 +25,16 @@ const sections = [
     <aside class="docs-sidebar">
       <p class="sidebar-label">MineCore</p>
       <nav aria-label="Dokumentation">
-        {sections.map((section) => <a class:list={{active: Astro.url.pathname === section.href}} href={section.href}>{section.label}</a>)}
+        {sections.map((section) => section.children ? (
+          <div class="sidebar-group">
+            <a class:list={{active: Astro.url.pathname === section.href}} href={section.href}>{section.label}</a>
+            <ul class="sidebar-children" aria-label={section.label}>
+              {section.children.map((child) => (
+                <li><a class:list={{active: Astro.url.pathname === child.href}} aria-current={Astro.url.pathname === child.href ? 'page' : undefined} href={child.href}>{child.label}</a></li>
+              ))}
+            </ul>
+          </div>
+        ) : <a class:list={{active: Astro.url.pathname === section.href}} href={section.href}>{section.label}</a>)}
       </nav>
     </aside>
     <article class="doc-content">
@@ -32,3 +44,10 @@ const sections = [
     </article>
   </div>
 </BaseLayout>
+
+<style>
+  .sidebar-group { min-width: 0; }
+  .sidebar-group > a, .sidebar-children a { display: block; }
+  .sidebar-children { list-style: none; margin: 5px 0 0 12px; padding: 0 0 0 6px; border-left: 1px solid var(--line); }
+  .sidebar-children a { font-size: .9rem; }
+</style>
