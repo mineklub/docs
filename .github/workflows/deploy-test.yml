@@ -15,10 +15,12 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version: '26'
           cache: npm
 
       - name: Install dependencies
         run: npm install
+      - name: Run Oxlint
+        run: npm run lint
       - name: Test Astro build
         run: npm run build

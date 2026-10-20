@@ -21,3 +21,8 @@ Byg sitet statisk med `npm run build`, eller se det byggede site med `npm run pr
 - [Skript-hooks](https://docs.mineclub.dk/docs/skript)
 
 Dokumentationen er skrevet på dansk. Kode-, klasse- og API-navne følger MineCore-kildekoden.
+
+## Node.js version
+
+Use Node.js **26**, pinned in `package.json`, `.nvmrc`, and CI.
+Both documentation build workflows use this version.
