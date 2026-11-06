@@ -6,6 +6,7 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "test:i18n": "node --experimental-vm-modules --test scripts/i18n.test.mjs",
     "typecheck": "astro check",
     "lint": "oxlint --deny-warnings .",
     "lint:fix": "oxlint --fix --deny-warnings ."

@@ -1,20 +1,21 @@
 ---
+import { t } from '../../i18n';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import '../../styles/global.css';
 ---
-<DocsLayout title="Kom i gang" eyebrow="01 / Første skridt">
-  <p class="lead">MineCore gør det muligt at modtage MineClub-betalinger og votes direkte i din server. Du behøver kun at aktivere MineCore, vælge det rigtige Skript-hook hvis du bruger Skript, og genstarte serveren.</p>
-  <h2>Aktivér MineCore</h2>
-  <p>Hoster du selv? Følg <a href="/docs/serveropsaetning">opsætning af Paper, Velocity og Waterfall</a>. Vil du registrere serveren på MineClub, skal du bruge <a href="/docs/eksterne-servere">guiden til eksterne servere</a>.</p>
-  <p>Kør denne kommando i serverkonsollen eller som spiller med de nødvendige rettigheder:</p>
+<DocsLayout titleKey="article.kom-i-gang.title" eyebrowKey="article.kom-i-gang.eyebrow">
+  <p class="lead" data-i18n-html="article.kom-i-gang.text01" set:html={t("en", "article.kom-i-gang.text01")} />
+  <h2 data-i18n-html="article.kom-i-gang.text02" set:html={t("en", "article.kom-i-gang.text02")} />
+  <p data-i18n-html="article.kom-i-gang.text03" set:html={t("en", "article.kom-i-gang.text03")} />
+  <p data-i18n-html="article.kom-i-gang.text04" set:html={t("en", "article.kom-i-gang.text04")} />
   <pre><code>/sm minecore enable</code></pre>
-  <p>Vil du deaktivere MineCore igen, bruger du:</p>
+  <p data-i18n-html="article.kom-i-gang.text05" set:html={t("en", "article.kom-i-gang.text05")} />
   <pre><code>/sm minecore disable</code></pre>
-  <blockquote>Serveren skal genstartes, efter du aktiverer eller deaktiverer MineCore, før ændringen træder i kraft.</blockquote>
-  <h2>Det skal du bruge</h2>
-  <ul><li>En understøttet serverversion fra Minecraft 1.8 til 26.2.</li><li>En JVM-version fra Java 8 til Java 26.</li><li>MineCore installeret på serveren.</li><li>Et Skript-hook, hvis du bruger Skript.</li></ul>
-  <h2>Kompatibilitet</h2>
-  <p>MineCore understøtter Minecraft-versioner fra <strong>1.8 til 26.2</strong> og JVM-versioner fra <strong>JVM 8 til JVM 26</strong>. Vælg altid den MineCore-udgave, der passer til den Java-version, din server faktisk kører med.</p>
-  <p>Hvis du bruger Skript, vælges understøttelsen efter den Skript-version, din server bruger. Brug det Skript-hook, der matcher din version, så MineCore-events, effects og expressions bliver registreret korrekt.</p>
-  <p>Næste skridt er <a href="/docs/installation">installationsguiden</a>, hvor man kan se hvordan man kan bygge sit eget plugin ved bruge af vores MineCore.</p>
+  <blockquote data-i18n-html="article.kom-i-gang.text06" set:html={t("en", "article.kom-i-gang.text06")} />
+  <h2 data-i18n-html="article.kom-i-gang.text07" set:html={t("en", "article.kom-i-gang.text07")} />
+  <ul><li data-i18n-html="article.kom-i-gang.text08" set:html={t("en", "article.kom-i-gang.text08")} /><li data-i18n-html="article.kom-i-gang.text09" set:html={t("en", "article.kom-i-gang.text09")} /><li data-i18n-html="article.kom-i-gang.text10" set:html={t("en", "article.kom-i-gang.text10")} /><li data-i18n-html="article.kom-i-gang.text11" set:html={t("en", "article.kom-i-gang.text11")} /></ul>
+  <h2 data-i18n-html="article.kom-i-gang.text12" set:html={t("en", "article.kom-i-gang.text12")} />
+  <p data-i18n-html="article.kom-i-gang.text13" set:html={t("en", "article.kom-i-gang.text13")} />
+  <p data-i18n-html="article.kom-i-gang.text14" set:html={t("en", "article.kom-i-gang.text14")} />
+  <p data-i18n-html="article.kom-i-gang.text15" set:html={t("en", "article.kom-i-gang.text15")} />
 </DocsLayout>

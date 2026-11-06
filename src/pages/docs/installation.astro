@@ -1,12 +1,13 @@
 ---
+import { t } from '../../i18n';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import '../../styles/global.css';
 ---
-<DocsLayout title="Java API-installation" eyebrow="02 / Java API">
-  <p class="lead">Denne guide viser, hvordan du bygger et Paper-plugin med MineCore Java API’et. Den følger strukturen i MineCore-repositoriets <a href="https://github.com/mineklub/MineCore/tree/dev/example">example-module</a>.</p>
+<DocsLayout titleKey="article.installation.title" eyebrowKey="article.installation.eyebrow">
+  <p class="lead" data-i18n-html="article.installation.text01" set:html={t("en", "article.installation.text01")} />
 
-  <h2>1. Opret et Paper-plugin</h2>
-  <p>Dit plugin skal have en klasse, der arver fra <code>JavaPlugin</code>, og en <code>plugin.yml</code>. Eksemplet bruger <code>ExamplePlugin</code> som entrypoint.</p>
+  <h2 data-i18n-html="article.installation.text02" set:html={t("en", "article.installation.text02")} />
+  <p data-i18n-html="article.installation.text03" set:html={t("en", "article.installation.text03")} />
   <pre><code>package dk.mineclub.minecore.example;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,38 +19,38 @@ public class ExamplePlugin extends JavaPlugin &#123;
     &#125;
 &#125;</code></pre>
 
-  <h2>2. Tilføj MineCore API’et</h2>
-  <p>Eksemplet bruger Java 25-varianten af API’et. Vælg den artifact, der matcher din valgte Java target.</p>
+  <h2 data-i18n-html="article.installation.text04" set:html={t("en", "article.installation.text04")} />
+  <p data-i18n-html="article.installation.text05" set:html={t("en", "article.installation.text05")} />
   <pre><code>dependencies &#123;
     implementation("dk.mineclub.minecore:api-jvm25:0.1.1")
     compileOnly("io.papermc.paper:paper-api:$paperApiVersion")
 &#125;</code></pre>
-  <p>MineCore-eksemplet bruger Gradle Kotlin DSL i <code>example/build.gradle.kts</code>. Det aktiverer også Shadow-plugin’et, så plugin-JAR’en kan bygges som en samlet distribution.</p>
+  <p data-i18n-html="article.installation.text06" set:html={t("en", "article.installation.text06")} />
   <pre><code>plugins &#123;
     id("java-library")
     alias(libs.plugins.shadow)
 &#125;</code></pre>
-  <blockquote>Husk at gøre MineCore API’et tilgængeligt ved runtime. Du skal enten shade API’et ind i din egen plugin-JAR med Shadow, eller bruge MineCore som separat plugin og deklarere det som en soft dependency.</blockquote>
-  <p>Hvis MineCore leveres separat på serveren, kan dependency’en være <code>compileOnly</code>, så API’et ikke pakkes endnu en gang ind i dit plugin:</p>
+  <blockquote data-i18n-html="article.installation.text07" set:html={t("en", "article.installation.text07")} />
+  <p data-i18n-html="article.installation.text08" set:html={t("en", "article.installation.text08")} />
   <pre><code>dependencies &#123;
     compileOnly("dk.mineclub.minecore:api-jvm25:0.1.1")
 &#125;</code></pre>
 
-  <h2>3. Konfigurér plugin.yml</h2>
-  <p>Opret <code>src/main/resources/plugin.yml</code>, og peg <code>main</code> på din <code>JavaPlugin</code>-klasse:</p>
+  <h2 data-i18n-html="article.installation.text09" set:html={t("en", "article.installation.text09")} />
+  <p data-i18n-html="article.installation.text10" set:html={t("en", "article.installation.text10")} />
     <pre><code>name: "ExamplePlugin"
 main: "dk.mineclub.minecore.example.ExamplePlugin"
 version: "$&#123;version&#125;"</code></pre>
-  <p>Tilføj <code>softdepend</code>, når MineCore ligger som separat plugin i serverens <code>plugins/</code>-mappe:</p>
+  <p data-i18n-html="article.installation.text11" set:html={t("en", "article.installation.text11")} />
   <pre><code>name: "ExamplePlugin"
 main: "dk.mineclub.minecore.example.ExamplePlugin"
 version: "$&#123;version&#125;"
 softdepend:
   - MineCore</code></pre>
-  <p>Brug kun <code>softdepend</code>-modellen, hvis MineCore-plugin’et faktisk er installeret. Hvis du shader API’et ind i din egen JAR, skal du ikke gøre din plugin afhængig af en separat MineCore-installation.</p>
+  <p data-i18n-html="article.installation.text12" set:html={t("en", "article.installation.text12")} />
 
-  <h2>4. Hent MineCoreApi</h2>
-  <p>Eksemplet opretter en API-instans i <code>onEnable()</code> og registrerer derefter event-listeners på MineCore’s async event bus.</p>
+  <h2 data-i18n-html="article.installation.text13" set:html={t("en", "article.installation.text13")} />
+  <p data-i18n-html="article.installation.text14" set:html={t("en", "article.installation.text14")} />
   <pre><code>public class ExamplePlugin extends JavaPlugin &#123;
     public MineCoreApi api;
 
@@ -61,8 +62,8 @@ softdepend:
     &#125;
 &#125;</code></pre>
 
-  <h2>5. Opret en request</h2>
-  <p>Eksemplets <code>BuyCommand</code> bygger et <code>StoreProduct</code>, lægger det i en <code>StoreRequest</code> og sender requesten gennem request-manageren.</p>
+  <h2 data-i18n-html="article.installation.text15" set:html={t("en", "article.installation.text15")} />
+  <p data-i18n-html="article.installation.text16" set:html={t("en", "article.installation.text16")} />
   <pre><code>StoreProduct product = StoreProduct.builder()
     .name("Example Product")
     .id("example_product")
@@ -77,8 +78,8 @@ StoreRequest request = StoreRequest.builder()
 
 plugin.api.getMinecoreRequestManager().createRequest(request);</code></pre>
 
-  <h2>6. Opret serverbetalinger</h2>
-  <p>MineCore Java API’et understøtter også serverbetalinger gennem <code>RequestManager</code>. En <code>ServerPayRequest</code> indeholder spillerens Minecraft-konto som tekst i <code>mcaccount</code> og beløbet i <code>amount</code>. Send requesten gennem <code>createServerPay</code>; metoden returnerer en <code>ServerPayResponse</code>, hvis kaldet lykkes.</p>
+  <h2 data-i18n-html="article.installation.text17" set:html={t("en", "article.installation.text17")} />
+  <p data-i18n-html="article.installation.text18" set:html={t("en", "article.installation.text18")} />
   <pre><code>ServerPayRequest payRequest = ServerPayRequest.builder()
     .mcaccount(player.getUniqueId().toString())
     .amount(10.0)
@@ -90,17 +91,17 @@ ServerPayResponse response =
 if (response != null) &#123;
     plugin.getLogger().info("Serverbetaling oprettet");
 &#125;</code></pre>
-  <p>API’et serialiserer requesten til JSON og sender den til <code>/server/pay</code> med MineCore-tokenet. Hvis requesten er <code>null</code>, hvis svaret mangler, eller hvis kaldet fejler, returnerer <code>createServerPay</code> <code>null</code>.</p>
+  <p data-i18n-html="article.installation.text19" set:html={t("en", "article.installation.text19")} />
   <pre><code>ServerPayRequest payRequest = ServerPayRequest.builder()
     .mcaccount("player-uuid")
     .amount(10.0)
     .build();
 
 JsonObject json = payRequest.toJson();</code></pre>
-  <p>Brug altid <code>ServerPayRequest</code> og <code>ServerPayResponse</code> fra samme API-artifact som resten af dit plugin.</p>
+  <p data-i18n-html="article.installation.text20" set:html={t("en", "article.installation.text20")} />
 
-    <h2>7. Hent og håndtér votes</h2>
-    <p>Votes kan hentes gennem <code>RequestManager.getVotes</code>. Brug <code>GetVotesOptions</code> til at filtrere på spiller, status, side og antal resultater. <code>GetVotesResponse.getAll()</code> giver vote-listen, uanset om svaret er pagineret.</p>
+    <h2 data-i18n-html="article.installation.text21" set:html={t("en", "article.installation.text21")} />
+    <p data-i18n-html="article.installation.text22" set:html={t("en", "article.installation.text22")} />
     <pre><code>GetVotesOptions options = GetVotesOptions.builder()
     .mcaccount(player.getUniqueId().toString())
     .page(1)
@@ -116,7 +117,7 @@ JsonObject json = payRequest.toJson();</code></pre>
       plugin.getLogger().info("Vote: " + vote.getId());
     &#125;
   &#125;</code></pre>
-    <p>En <code>MappedVote</code> indeholder blandt andet <code>id</code>, <code>status</code>, <code>createdAt</code>, <code>updatedAt</code> og <code>mcaccount</code>. Når et modtaget vote er behandlet, markeres det med <code>acceptVote(vote)</code>. Brug <code>rejectVote(vote)</code>, hvis vote-data ikke kan behandles.</p>
+    <p data-i18n-html="article.installation.text23" set:html={t("en", "article.installation.text23")} />
     <pre><code>MappedVote vote = event.getVote();
 
   if (vote != null && processVote(vote)) &#123;
@@ -125,8 +126,8 @@ JsonObject json = payRequest.toJson();</code></pre>
     plugin.api.getMinecoreRequestManager().rejectVote(vote);
   &#125;</code></pre>
 
-    <h2>8. Håndtér events</h2>
-  <p>Registrér en klasse med Guava’s <code>@Subscribe</code>. MineCore’s example håndterer pre-create, post-create, modtagne requests og votes i samme listener:</p>
+    <h2 data-i18n-html="article.installation.text24" set:html={t("en", "article.installation.text24")} />
+  <p data-i18n-html="article.installation.text25" set:html={t("en", "article.installation.text25")} />
   <pre><code>@Subscribe
 public void receiveEvent(ReceiveRequestEvent event) &#123;
     StoreCreatedRequest request = event.getStoreRequest();
@@ -144,14 +145,14 @@ public void receiveVoteEvent(ReceiveVoteEvent event) &#123;
     processVote(vote);
     mineCoreApi.getMinecoreRequestManager().acceptVote(vote);
 &#125;</code></pre>
-  <p>Se <a href="/docs/guides">event-livscyklus-guiden</a> for forskellen på de enkelte events og hvornår de kaldes.</p>
+  <p data-i18n-html="article.installation.text26" set:html={t("en", "article.installation.text26")} />
 
-  <h2>9. Byg og installér</h2>
-  <p>Kør buildet fra MineCore-projektets rod med Gradle wrapperen:</p>
+  <h2 data-i18n-html="article.installation.text27" set:html={t("en", "article.installation.text27")} />
+  <p data-i18n-html="article.installation.text28" set:html={t("en", "article.installation.text28")} />
   <pre><code>./gradlew :example:build</code></pre>
-  <p>På Windows kan du bruge:</p>
+  <p data-i18n-html="article.installation.text29" set:html={t("en", "article.installation.text29")} />
   <pre><code>.\\gradlew.bat :example:build</code></pre>
-  <p>Installér den byggede JAR fra <code>example/build/libs/</code> i Paper-serverens <code>plugins/</code>-mappe, og genstart serveren. Brug samme Java target til API-artifact, compile target og serverens JVM.</p>
+  <p data-i18n-html="article.installation.text30" set:html={t("en", "article.installation.text30")} />
 
-  <blockquote>API-eksemplet er baseret på MineCore’s <code>dev</code>-branch. Tjek altid den konkrete release, før du låser artifact-version og Paper API-version i dit eget plugin.</blockquote>
+  <blockquote data-i18n-html="article.installation.text31" set:html={t("en", "article.installation.text31")} />
 </DocsLayout>

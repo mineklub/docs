@@ -1,45 +1,46 @@
 ---
+import { t, type MessageKey } from '../i18n';
 import BaseLayout from './BaseLayout.astro';
 
 interface Props {
-  title: string;
-  description?: string;
-  eyebrow?: string;
+  titleKey: MessageKey;
+  descriptionKey?: MessageKey;
+  eyebrowKey?: MessageKey;
 }
 
-const {title, description, eyebrow = 'Dokumentation'} = Astro.props;
-const sections = [
-  {label: 'Kom i gang', href: '/docs/kom-i-gang'},
-  {label: 'Eksterne servere', href: '/docs/eksterne-servere', children: [
-    {label: 'Serveropsætning', href: '/docs/serveropsaetning'},
+const {titleKey, descriptionKey, eyebrowKey = 'nav.docs'} = Astro.props;
+const sections: { key: MessageKey; href: string; children?: { key: MessageKey; href: string }[] }[] = [
+  {key: 'nav.start', href: '/docs/kom-i-gang'},
+  {key: 'nav.external', href: '/docs/eksterne-servere', children: [
+    {key: 'nav.setup', href: '/docs/serveropsaetning'},
   ]},
-  {label: 'Java API-installation', href: '/docs/installation'},
-  {label: 'Livscyklus', href: '/docs/lifecycle'},
-  {label: 'API-reference', href: '/docs/api'},
-  {label: 'Skript-hooks', href: '/docs/skript'},
-  {label: 'Fejlfinding', href: '/docs/fejlfinding'},
+  {key: 'nav.installation', href: '/docs/installation'},
+  {key: 'nav.lifecycle', href: '/docs/lifecycle'},
+  {key: 'nav.api', href: '/docs/api'},
+  {key: 'nav.skript', href: '/docs/skript'},
+  {key: 'nav.troubleshooting', href: '/docs/fejlfinding'},
 ];
 ---
-<BaseLayout title={title} description={description}>
+<BaseLayout titleKey={titleKey} descriptionKey={descriptionKey}>
   <div class="docs-shell">
     <aside class="docs-sidebar">
       <p class="sidebar-label">MineCore</p>
-      <nav aria-label="Dokumentation">
+      <nav data-i18n-aria-label="nav.docs" aria-label={t("en", "nav.docs")}>
         {sections.map((section) => section.children ? (
           <div class="sidebar-group">
-            <a class:list={{active: Astro.url.pathname === section.href}} href={section.href}>{section.label}</a>
-            <ul class="sidebar-children" aria-label={section.label}>
+            <a class:list={{active: Astro.url.pathname === section.href}} href={section.href} data-i18n-html={section.key}>{t("en", section.key)}</a>
+            <ul class="sidebar-children" data-i18n-aria-label={section.key} aria-label={t("en", section.key)}>
               {section.children.map((child) => (
-                <li><a class:list={{active: Astro.url.pathname === child.href}} aria-current={Astro.url.pathname === child.href ? 'page' : undefined} href={child.href}>{child.label}</a></li>
+                <li><a class:list={{active: Astro.url.pathname === child.href}} aria-current={Astro.url.pathname === child.href ? 'page' : undefined} href={child.href} data-i18n-html={child.key}>{t("en", child.key)}</a></li>
               ))}
             </ul>
           </div>
-        ) : <a class:list={{active: Astro.url.pathname === section.href}} href={section.href}>{section.label}</a>)}
+        ) : <a class:list={{active: Astro.url.pathname === section.href}} href={section.href} data-i18n-html={section.key}>{t("en", section.key)}</a>)}
       </nav>
     </aside>
     <article class="doc-content">
-      <p class="eyebrow">{eyebrow}</p>
-      <h1>{title}</h1>
+      <p class="eyebrow" data-i18n-html={eyebrowKey}>{t("en", eyebrowKey)}</p>
+      <h1 data-i18n-html={titleKey}>{t("en", titleKey)}</h1>
       <slot />
     </article>
   </div>

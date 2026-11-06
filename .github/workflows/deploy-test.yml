@@ -20,7 +20,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+      - name: Check Astro types
+        run: npm run typecheck
       - name: Run Oxlint
         run: npm run lint
       - name: Test Astro build
         run: npm run build
+      - name: Validate translations and published routes
+        run: npm run test:i18n

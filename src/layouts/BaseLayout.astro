@@ -1,62 +1,73 @@
 ---
+import { t, type MessageKey } from '../i18n';
 interface Props {
-  title: string;
-  description?: string;
+  titleKey: MessageKey;
+  descriptionKey?: MessageKey;
   home?: boolean;
 }
-
-const {title, description = 'Dansk dokumentation til MineCore for Paper-servere.', home = false} = Astro.props;
-const documentationNavigation = [
-  {label: 'Kom i gang', href: '/docs/kom-i-gang'},
-  {label: 'Guides', href: '/docs/guides'},
-  {label: 'API-reference', href: '/docs/api'},
-  {label: 'Skript', href: '/docs/skript'},
+const { titleKey, descriptionKey = 'meta.description', home = false } = Astro.props;
+const documentationNavigation: { key: MessageKey; href: string }[] = [
+  {key: 'nav.start', href: '/docs/kom-i-gang'},
+  {key: 'nav.guides', href: '/docs/guides'},
+  {key: 'nav.api', href: '/docs/api'},
+  {key: 'nav.skript', href: '/docs/skript'},
 ];
-const homeNavigation = [
-  {label: 'HJEM', href: '/'},
-  {label: 'SERVER', href: '/docs/kom-i-gang'},
-  {label: 'BUTIK', href: 'https://mineclub.dk/butik'},
-  {label: 'GUIDES', href: '/docs/guides'},
-  {label: 'STAFFS', href: 'https://mineclub.dk/staffs'},
+const homeNavigation: { key: MessageKey; href: string }[] = [
+  {key: 'nav.home', href: '/'},
+  {key: 'nav.server', href: '/docs/kom-i-gang'},
+  {key: 'nav.store', href: 'https://mineclub.dk/butik'},
+  {key: 'nav.guides', href: '/docs/guides'},
+  {key: 'nav.staff', href: 'https://mineclub.dk/staffs'},
 ];
 ---
 <!doctype html>
-<html lang="da">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={description} />
-    <title>{title} | MineCore</title>
+    <meta name="description" data-i18n-content={descriptionKey} content={t('en', descriptionKey)} />
+    <title data-i18n-title={titleKey}>{t('en', titleKey)} | MineCore</title>
     <link rel="icon" href="/img/favicon.ico" />
   </head>
   <body class:list={{'home-layout': home}}>
     <header class="site-header">
-      <a class="brand" href="/" aria-label="MineCore forsiden">
+      <a class="brand" href="/" data-i18n-aria-label="nav.brand" aria-label={t('en', 'nav.brand')}>
         <img src="/img/logo.png" alt="" />
         <span>MineCore <small>docs</small></span>
       </a>
-      <nav class="main-nav" aria-label="Primær navigation">
-        {(home ? homeNavigation : documentationNavigation).map((item) => <a href={item.href}>{item.label}</a>)}
+      <nav class="main-nav" data-i18n-aria-label="nav.primary" aria-label={t('en', 'nav.primary')}>
+        {(home ? homeNavigation : documentationNavigation).map((item) => <a href={item.href} data-i18n-html={item.key}>{t('en', item.key)}</a>)}
         <a class="github-link" href="https://github.com/mineklub/minecore">{home ? 'MINECORE ↗' : 'GitHub ↗'}</a>
-        <button class="theme-toggle" type="button" aria-label="Skift farvetema" data-theme-toggle>◐</button>
+        <button class="theme-toggle" type="button" data-i18n-aria-label="nav.theme" aria-label={t('en', 'nav.theme')} data-theme-toggle>◐</button>
+        <div class="language-control">
+          <select data-language data-i18n-aria-label="language.label" aria-label={t('en', 'language.label')}>
+            <option value="en" lang="en">English</option><option value="da" lang="da">Dansk</option>
+          </select>
+          <span data-language-error role="alert" hidden></span>
+        </div>
       </nav>
     </header>
-    <main>
-      <slot />
-    </main>
+    <main><slot /></main>
     <footer class="site-footer">
-      <div><strong>MineCore</strong><span>Åben infrastruktur til MineClub.</span></div>
-      <div><a href="https://github.com/mineklub/minecore">Kildekode</a><a href="https://github.com/mineklub/minecore/blob/main/LICENSE">GPL-3.0</a></div>
+      <div><strong>MineCore</strong><span data-i18n-html="footer.description">{t('en', 'footer.description')}</span></div>
+      <div><a href="https://github.com/mineklub/minecore" data-i18n-html="footer.source">{t('en', 'footer.source')}</a><a href="https://github.com/mineklub/minecore/blob/main/LICENSE">GPL-3.0</a></div>
     </footer>
     <script>
+      import '../i18n/client';
       const button = document.querySelector('[data-theme-toggle]');
-      const stored = localStorage.getItem('theme');
+      let stored: string | null = null;
+      try { stored = localStorage.getItem('theme'); } catch { /* Storage may be disabled. */ }
       document.documentElement.dataset.theme = stored ?? 'dark';
       button?.addEventListener('click', () => {
         const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
         document.documentElement.dataset.theme = next;
-        localStorage.setItem('theme', next);
+        try { localStorage.setItem('theme', next); } catch { /* Theme still changes for this page. */ }
       });
     </script>
   </body>
 </html>
+<style>
+  .language-control { position: relative; }
+  .language-control select { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 5px; }
+  .language-control [role='alert'] { position: absolute; right: 0; top: 100%; width: 230px; padding: 8px; background: var(--surface); color: var(--text); border: 1px solid var(--line); z-index: 10; }
+</style>

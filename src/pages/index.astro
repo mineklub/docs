@@ -1,46 +1,54 @@
 ---
+import { t } from '../i18n';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/global.css';
 ---
-<BaseLayout title="MineCore" description="MineCore-dokumentation fra MineClub." home>
+<BaseLayout titleKey="home.title" descriptionKey="home.description" home>
   <section class="mineclub-hero">
     <div class="hero-shade"></div>
     <div class="hero-content">
       <img class="hero-logo" src="/img/logo.png" alt="MineClub" />
-      <p class="hero-kicker">DANSK MINECRAFT-NETVÆRK</p>
-      <h1><span>MineCore</span><strong>DEVELOPER<br />DOCUMENTATION</strong></h1>
-      <p class="hero-copy">Byg, handl og konkurrér på tværs af MineClub. Integrér betalinger og votes direkte i din Paper-server.</p>
+      <p class="hero-kicker" data-i18n-html="home.kicker" set:html={t("en", "home.kicker")} />
+      <h1 data-i18n-html="home.headline" set:html={t("en", "home.headline")} />
+      <p class="hero-copy" data-i18n-html="home.intro" set:html={t("en", "home.intro")} />
       <div class="server-address">
         <code>mc.mineclub.dk</code>
-        <button type="button" data-copy="mc.mineclub.dk">KOPIÉR <span aria-hidden="true">▣</span></button>
+        <button type="button" data-copy="mc.mineclub.dk" data-i18n-html="home.copy" set:html={t("en", "home.copy")} />
       </div>
-      <p class="copy-note" data-copy-note>Kopiér adressen og tilføj den under Multiplayer i Minecraft.</p>
+      <p class="copy-note" data-copy-note data-i18n-html="home.copyNote" set:html={t("en", "home.copyNote")} />
       <div class="hero-actions">
         <a class="hero-button" href="https://discord.mineclub.dk/">◈ &nbsp; DISCORD</a>
-        <a class="hero-button" href="https://mineclub.dk/butik">♧ &nbsp; SE SHOPPEN</a>
+        <a class="hero-button" href="https://mineclub.dk/butik" data-i18n-html="home.store" set:html={t("en", "home.store")} />
       </div>
     </div>
-    <a class="scroll-cue" href="#docs-links" aria-label="Se dokumentation">SCROLL <span>↓</span></a>
+    <a class="scroll-cue" href="#docs-links" data-i18n-aria-label="home.scrollLabel" aria-label={t("en", "home.scrollLabel")} data-i18n-html="home.scroll" set:html={t("en", "home.scroll")} />
   </section>
   <section class="docs-links" id="docs-links">
-    <p class="section-kicker">MINECORE / DOKUMENTATION</p>
-    <h2>Alt du skal bruge<br /><em>til din server.</em></h2>
+    <p class="section-kicker" data-i18n-html="home.section" set:html={t("en", "home.section")} />
+    <h2 data-i18n-html="home.everything" set:html={t("en", "home.everything")} />
     <div class="docs-link-grid">
-      <a href="/docs/kom-i-gang"><span>01</span><strong>Kom i gang</strong><small>Installation og første plugin</small><b>↗</b></a>
-      <a href="/docs/api"><span>02</span><strong>API-reference</strong><small>Events, requests og votes</small><b>↗</b></a>
-      <a href="/docs/skript"><span>03</span><strong>Skript-hooks</strong><small>MineCore uden Java</small><b>↗</b></a>
-      <a href="/docs/eksterne-servere"><span>04</span><strong>Eksterne servere</strong><small>Forbindelse og godkendelse på MineClub</small><b>↗</b></a>
-      <a href="/docs/serveropsaetning"><span>05</span><strong>Serveropsætning</strong><small>Paper, Velocity og Waterfall</small><b>↗</b></a>
+      <a href="/docs/kom-i-gang"><span>01</span><strong data-i18n-html="home.start" set:html={t("en", "home.start")} /><small data-i18n-html="home.install" set:html={t("en", "home.install")} /><b>↗</b></a>
+      <a href="/docs/api"><span>02</span><strong data-i18n-html="home.api" set:html={t("en", "home.api")} /><small data-i18n-html="home.apiSummary" set:html={t("en", "home.apiSummary")} /><b>↗</b></a>
+      <a href="/docs/skript"><span>03</span><strong data-i18n-html="home.skript" set:html={t("en", "home.skript")} /><small data-i18n-html="home.skriptSummary" set:html={t("en", "home.skriptSummary")} /><b>↗</b></a>
+      <a href="/docs/eksterne-servere"><span>04</span><strong data-i18n-html="home.external" set:html={t("en", "home.external")} /><small data-i18n-html="home.externalSummary" set:html={t("en", "home.externalSummary")} /><b>↗</b></a>
+      <a href="/docs/serveropsaetning"><span>05</span><strong data-i18n-html="home.setup" set:html={t("en", "home.setup")} /><small data-i18n-html="home.setupSummary" set:html={t("en", "home.setupSummary")} /><b>↗</b></a>
     </div>
   </section>
 </BaseLayout>
 <script>
+  import { t, normalizeLocale } from '../i18n';
   const copyButton = document.querySelector<HTMLButtonElement>('[data-copy]');
   const copyNote = document.querySelector<HTMLElement>('[data-copy-note]');
   copyButton?.addEventListener('click', async () => {
-    await navigator.clipboard.writeText(copyButton.dataset.copy ?? 'mc.mineclub.dk');
-    if (copyNote) copyNote.textContent = 'Kopieret. Tilføj adressen under Multiplayer i Minecraft.';
-    copyButton.textContent = 'KOPIERET ✓';
+    const locale = normalizeLocale(document.documentElement.lang);
+    try {
+      await navigator.clipboard.writeText(copyButton.dataset.copy ?? 'mc.mineclub.dk');
+      if (copyNote) { copyNote.dataset.i18nHtml = 'copy.success'; copyNote.textContent = t(locale, 'copy.success'); }
+      copyButton.dataset.i18nHtml = 'copy.done';
+      copyButton.textContent = t(locale, 'copy.done');
+    } catch {
+      if (copyNote) { copyNote.dataset.i18nHtml = 'copy.failed'; copyNote.textContent = t(locale, 'copy.failed'); }
+    }
   });
 </script>
 <style is:global>
@@ -85,5 +93,5 @@ import '../styles/global.css';
   html[data-theme='light'] .home-layout .docs-link-grid a { border-color: #cbd8c8; color: #17231c; background: rgba(255,255,255,.72); box-shadow: 0 8px 24px rgba(48,72,47,.06); }
   html[data-theme='light'] .home-layout .docs-link-grid a:hover { border-color: #5d9e31; background: #fff; }
   html[data-theme='light'] .home-layout .docs-link-grid small { color: #607064; }
-  @media (max-width: 700px) { .home-layout .site-header { width: calc(100% - 28px); }.home-layout .main-nav { gap: 8px; }.home-layout .main-nav a:nth-child(n+3) { display: none; }.mineclub-hero { min-height: 760px; }.hero-content { padding-top: 35px; }.hero-content h1 strong { font-size: clamp(2.5rem, 13vw, 4rem); }.docs-link-grid { grid-template-columns: 1fr; }.docs-links { padding-top: 70px; } }
+  @media (max-width: 700px) { .home-layout .site-header { width: calc(100% - 28px); }.home-layout .main-nav { gap: 8px; }.home-layout .main-nav a:nth-child(n+3) { display: none; }.mineclub-hero { min-height: 760px; }.hero-content { padding-top: 35px; }.hero-content h1 strong { font-size: clamp(2rem, 11vw, 3.5rem); }.docs-link-grid { grid-template-columns: 1fr; }.docs-links { padding-top: 70px; } }
 </style>

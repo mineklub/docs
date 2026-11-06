@@ -1,121 +1,122 @@
 ---
+import { t } from '../../i18n';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import '../../styles/global.css';
 ---
-<DocsLayout title="Eksterne servere" description="Registrér din eksterne Minecraft-server på MineClub, konfigurér forbindelsen og send den til godkendelse." eyebrow="Servere / MineClub">
-  <p class="lead">En ekstern server kører hos dig eller din hostingudbyder og registreres på MineClub. Du står selv for serverfiler, opdateringer, netværk og start/stop.</p>
-  <p>Mangler du selve serveren? Se <a href="/docs/serveropsaetning">opsætning af Paper, Velocity og Waterfall</a>. Den guide beskriver selvstændige servere og netværk; en forbindelse gennem MineClub kræver indstillingerne her.</p>
+<DocsLayout titleKey="article.eksterne-servere.title" descriptionKey="article.eksterne-servere.description" eyebrowKey="article.eksterne-servere.eyebrow">
+  <p class="lead" data-i18n-html="article.eksterne-servere.text01" set:html={t("en", "article.eksterne-servere.text01")} />
+  <p data-i18n-html="article.eksterne-servere.text02" set:html={t("en", "article.eksterne-servere.text02")} />
 
-  <h2 id="opret">1. Opret registreringen</h2>
-  <p>Log ind på MineClub med den Minecraft-konto, der skal eje serveren. Kør kommandoen i spillet med dit ønskede navn:</p>
+  <h2 id="opret" data-i18n-html="article.eksterne-servere.text03" set:html={t("en", "article.eksterne-servere.text03")} />
+  <p data-i18n-html="article.eksterne-servere.text04" set:html={t("en", "article.eksterne-servere.text04")} />
   <pre><code>/sm external create MinServer</code></pre>
-  <p>Navnet skal være ledigt og bestå af 3–16 bogstaver. Danske bogstaver er tilladt; tal, mellemrum og bindestreger er ikke. Registreringen opretter ikke en server hos en hostingudbyder.</p>
+  <p data-i18n-html="article.eksterne-servere.text05" set:html={t("en", "article.eksterne-servere.text05")} />
 
-  <h2 id="forbindelse">2. Gem forbindelsen i panelet eller i spillet</h2>
+  <h2 id="forbindelse" data-i18n-html="article.eksterne-servere.text06" set:html={t("en", "article.eksterne-servere.text06")} />
   <div class="connection-tabs" data-connection-tabs>
-  <div class="connection-tab-list" role="tablist" aria-label="Vælg opsætningsmetode" hidden>
-    <button type="button" id="connection-game-tab" role="tab" aria-controls="connection-game" aria-selected="true">I spillet</button>
-    <button type="button" id="connection-web-tab" role="tab" aria-controls="connection-web" aria-selected="false" tabindex="-1">På hjemmesiden</button>
+  <div class="connection-tab-list" role="tablist" data-i18n-aria-label="a11y.setupMethod" aria-label={t("en", "a11y.setupMethod")} hidden>
+    <button type="button" id="connection-game-tab" role="tab" aria-controls="connection-game" aria-selected="true" data-i18n-html="article.eksterne-servere.text07" set:html={t("en", "article.eksterne-servere.text07")} />
+    <button type="button" id="connection-web-tab" role="tab" aria-controls="connection-web" aria-selected="false" tabindex="-1" data-i18n-html="article.eksterne-servere.text08" set:html={t("en", "article.eksterne-servere.text08")} />
   </div>
   <section id="connection-web" aria-labelledby="connection-web-tab">
-  <h3>På hjemmesiden</h3>
+  <h3 data-i18n-html="article.eksterne-servere.text09" set:html={t("en", "article.eksterne-servere.text09")} />
   <ol>
-    <li>Åbn <a href="https://mineclub.dk/panel">MineClub-panelet</a>, vælg ejerens Minecraft-konto og den eksterne server, og åbn <strong>Indstillinger</strong>.</li>
-    <li>Under <strong>Forbindelse</strong> angiver du serverens IPv4- eller IPv6-adresse og port. Brug en IP-adresse uden domænenavn, protokol eller port i IP-feltet. Porten skal være et heltal fra 1 til 65535.</li>
-    <li>Vælg den forwarding-protokol, din server modtager, og angiv den Minecraft-version, serveren faktisk kører.</li>
-    <li>Når serveren kører hos din udbyder, og du er klar til at teste forbindelsen, vælger du <strong>Online</strong> under <strong>Status på Mineclub</strong>.</li>
-    <li>Tryk <strong>Gem indstillinger</strong>, og konfigurér forwarding på din server som beskrevet nedenfor.</li>
+    <li data-i18n-html="article.eksterne-servere.text10" set:html={t("en", "article.eksterne-servere.text10")} />
+    <li data-i18n-html="article.eksterne-servere.text11" set:html={t("en", "article.eksterne-servere.text11")} />
+    <li data-i18n-html="article.eksterne-servere.text12" set:html={t("en", "article.eksterne-servere.text12")} />
+    <li data-i18n-html="article.eksterne-servere.text13" set:html={t("en", "article.eksterne-servere.text13")} />
+    <li data-i18n-html="article.eksterne-servere.text14" set:html={t("en", "article.eksterne-servere.text14")} />
   </ol>
   </section>
   <section id="connection-game" aria-labelledby="connection-game-tab">
-  <h3>I spillet</h3>
-  <p>IP-adresse og port kan også gemmes med <code>/sm set</code>. Kommandoerne ændrer din valgte primære server, som skal være en ekstern server. Vælg først den rigtige server med <code>/sm changeserver</code> og brug tab-fuldførelse til servernavnet.</p>
+  <h3 data-i18n-html="article.eksterne-servere.text15" set:html={t("en", "article.eksterne-servere.text15")} />
+  <p data-i18n-html="article.eksterne-servere.text16" set:html={t("en", "article.eksterne-servere.text16")} />
   <pre><code>/sm changeserver &lt;servernavn&gt;
 /sm set externalIp &lt;IP-adresse&gt;
 /sm set externalPort &lt;port&gt;</code></pre>
-  <p>Erstat pladsholderne med dine egne værdier, eksempelvis din servers IP-adresse og port <code>25565</code>. Brug mellemrum efter <code>set</code> og stav indstillingerne <code>externalIp</code> og <code>externalPort</code> som vist. Vent på bekræftelsen af servervalget, før du ændrer forbindelsen.</p>
-  <p>Ændringerne gemmes direkte; IP eller port ændret i spillet nulstiller også godkendelsen til <strong>Kladde</strong>. Fortsæt derefter med forwarding og godkendelse nedenfor.</p>
-  <p>Når serveren er startet hos din udbyder og klar til test, sætter du den valgte eksterne server til Online med:</p>
+  <p data-i18n-html="article.eksterne-servere.text17" set:html={t("en", "article.eksterne-servere.text17")} />
+  <p data-i18n-html="article.eksterne-servere.text18" set:html={t("en", "article.eksterne-servere.text18")} />
+  <p data-i18n-html="article.eksterne-servere.text19" set:html={t("en", "article.eksterne-servere.text19")} />
   <pre><code>/sm set online true</code></pre>
-  <p>Vil du markere den som Offline igen, bruger du <code>/sm set online false</code>. Kommandoen hedder <code>online</code> og tager <code>true</code> eller <code>false</code>.</p>
+  <p data-i18n-html="article.eksterne-servere.text20" set:html={t("en", "article.eksterne-servere.text20")} />
   </section>
   </div>
-  <p>Adressen skal kunne nås fra MineClub. Brug ikke <code>127.0.0.1</code> som ekstern adresse: den peger tilbage på den maskine, der opretter forbindelsen. Tillad MineClubs forbindelser i din udbyders netværksregler; få de aktuelle kildeadresser fra MineClub, hvis du skal oprette en tilladelsesliste.</p>
-  <blockquote><p><strong>Husk firewall før test og åbning:</strong> Blokér indgående TCP-trafik fra internettet til den eksterne servers IP-adresse og port, og tillad kun MineClubs betroede kildeadresser på denne port. Det forhindrer direkte forbindelser uden om MineClub. Få de aktuelle adresser fra MineClub, og anvend reglerne for både IPv4 og IPv6, hvis begge er tilgængelige.</p><p>Det er indgående trafik udefra, der skal begrænses. Din Velocity- eller Waterfall-proxy skal stadig kunne lave udgående HTTPS-forbindelser til <code>api.mineclub.dk</code> på TCP-port <code>443</code> til login-kontrol. Test, at forbindelsen gennem MineClub virker, og at direkte adgang til serverens IP og port fra en anden internetforbindelse er blokeret.</p></blockquote>
-  <p><strong>Minecraft-version</strong> ændrer registreringen, men installerer ikke en ny serverversion. <strong>Status på Mineclub</strong> skal være Online, for at du kan tilslutte med <code>/server</code>. Statusændringen starter eller stopper ikke serverprocessen; det gør du hos din udbyder.</p>
+  <p data-i18n-html="article.eksterne-servere.text21" set:html={t("en", "article.eksterne-servere.text21")} />
+  <blockquote><p data-i18n-html="article.eksterne-servere.text22" set:html={t("en", "article.eksterne-servere.text22")} /><p data-i18n-html="article.eksterne-servere.text23" set:html={t("en", "article.eksterne-servere.text23")} /></blockquote>
+  <p data-i18n-html="article.eksterne-servere.text24" set:html={t("en", "article.eksterne-servere.text24")} />
 
-  <h2 id="forwarding">3. Match forwarding og nøgle</h2>
-  <p><strong>Velocity og Waterfall som ekstern proxy kan kun forbindes til MineClub med HAProxy.</strong> Vælg <strong>HAProxy</strong> i panelet og angiv proxyens IP-adresse og lytteport. MODERN, LEGACY og BungeeGuard i panelet er til direkte forbindelse til en kompatibel backend, eksempelvis Paper; de bruges ikke på forbindelsen fra MineClub til din Velocity- eller Waterfall-proxy.</p>
+  <h2 id="forwarding" data-i18n-html="article.eksterne-servere.text25" set:html={t("en", "article.eksterne-servere.text25")} />
+  <p data-i18n-html="article.eksterne-servere.text26" set:html={t("en", "article.eksterne-servere.text26")} />
   <ul>
-    <li><strong>MODERN (Velocity):</strong> Til Paper med understøttelse af modern forwarding. Efter du gemmer, viser panelet en <strong>Forwarding-nøgle</strong>. Brug den som <code>proxies.velocity.secret</code> i Papers <code>config/paper-global.yml</code>.</li>
-    <li><strong>LEGACY (BungeeCord):</strong> Serveren skal modtage BungeeCord-forwarding, eksempelvis med <code>settings.bungeecord: true</code> i Papers <code>spigot.yml</code>. Begræns backend-adgangen til den betroede proxy.</li>
-    <li><strong>BungeeGuard:</strong> Kræver legacy-forwarding og BungeeGuard på modtagerserveren. Gem indstillingerne, og indsæt panelets <strong>BungeeGuard-token</strong> i pluginets tilladte tokens. Følg <a href="https://github.com/lucko/BungeeGuard">BungeeGuards installationsvejledning</a>.</li>
-    <li><strong>HAProxy:</strong> Vælg kun dette, hvis modtageren er konfigureret til PROXY-protokollen. Det er en særskilt protokol og kan ikke erstattes af en Velocity-nøgle eller BungeeCord-indstilling.</li>
+    <li data-i18n-html="article.eksterne-servere.text27" set:html={t("en", "article.eksterne-servere.text27")} />
+    <li data-i18n-html="article.eksterne-servere.text28" set:html={t("en", "article.eksterne-servere.text28")} />
+    <li data-i18n-html="article.eksterne-servere.text29" set:html={t("en", "article.eksterne-servere.text29")} />
+    <li data-i18n-html="article.eksterne-servere.text30" set:html={t("en", "article.eksterne-servere.text30")} />
   </ul>
-  <p>Ved direkte forbindelse fra MineClub til Paper med modern forwarding skal <code>online-mode=false</code> stå i <code>server.properties</code>, <code>settings.bungeecord</code> være <code>false</code>, og Papers Velocity-understøttelse være aktiveret. Paper skal bruge MineClubs nøgle, og forwarding-indstillingen for online-mode skal matche den autentificerende proxy. Se filernes placering i <a href="/docs/serveropsaetning#velocity">Paper-konfigurationen i Velocity-afsnittet</a>.</p>
-  <blockquote><p>Panelets nøgle tilhører forbindelsen fra MineClub. Et selvstændigt Velocity-netværk bruger sin egen <code>forwarding.secret</code>. Bland ikke de to nøgler, og del dem ikke i screenshots, chat eller offentlige konfigurationsfiler.</p></blockquote>
-  <p>Hvis nøglefeltet beder dig gemme, trykker du <strong>Gem indstillinger</strong> for at få nøglen vist. Stop serveren før filændringer, og start den igen bagefter.</p>
+  <p data-i18n-html="article.eksterne-servere.text31" set:html={t("en", "article.eksterne-servere.text31")} />
+  <blockquote><p data-i18n-html="article.eksterne-servere.text32" set:html={t("en", "article.eksterne-servere.text32")} /></blockquote>
+  <p data-i18n-html="article.eksterne-servere.text33" set:html={t("en", "article.eksterne-servere.text33")} />
 
   <div class="connection-tabs" data-connection-tabs>
-  <div class="connection-tab-list" role="tablist" aria-label="Vælg proxy" hidden>
-    <button type="button" id="proxy-velocity-tab" role="tab" aria-controls="proxy-velocity" aria-selected="true">Velocity</button>
-    <button type="button" id="proxy-waterfall-tab" role="tab" aria-controls="proxy-waterfall" aria-selected="false" tabindex="-1">Waterfall</button>
+  <div class="connection-tab-list" role="tablist" data-i18n-aria-label="a11y.proxy" aria-label={t("en", "a11y.proxy")} hidden>
+    <button type="button" id="proxy-velocity-tab" role="tab" aria-controls="proxy-velocity" aria-selected="true" data-i18n-html="article.eksterne-servere.text34" set:html={t("en", "article.eksterne-servere.text34")} />
+    <button type="button" id="proxy-waterfall-tab" role="tab" aria-controls="proxy-waterfall" aria-selected="false" tabindex="-1" data-i18n-html="article.eksterne-servere.text35" set:html={t("en", "article.eksterne-servere.text35")} />
   </div>
   <section id="proxy-velocity" aria-labelledby="proxy-velocity-tab">
-  <h3 id="velocity-haproxy">MineClub → Velocity → Paper</h3>
-  <p>Stop Velocity, og tilføj MineClubs sessionsadresse som JVM-argument før <code>-jar</code>. Tilpas JAR-navnet til din installerede udgave:</p>
+  <h3 id="velocity-haproxy" data-i18n-html="article.eksterne-servere.text36" set:html={t("en", "article.eksterne-servere.text36")} />
+  <p data-i18n-html="article.eksterne-servere.text37" set:html={t("en", "article.eksterne-servere.text37")} />
   <pre><code>java -Dmojang.sessionserver=https://api.mineclub.dk/v2/session/minecraft/hasJoined -jar velocity-4.1.2-SNAPSHOT-27.jar</code></pre>
-  <p><strong>På Velocity-proxyen — <code>velocity.toml</code>:</strong> Ret <code>online-mode</code> i roden og <code>haproxy-protocol</code> i den eksisterende <code>[advanced]</code>-sektion. Tilføj ikke en ekstra sektion, og brug ikke komma efter <code>true</code>.</p>
+  <p data-i18n-html="article.eksterne-servere.text38" set:html={t("en", "article.eksterne-servere.text38")} />
   <pre><code>online-mode = true
 
 [advanced]
 haproxy-protocol = true</code></pre>
-  <p>Placeringen af HAProxy-indstillingen er beskrevet i <a href="https://docs.papermc.io/velocity/configuration/#advanced-section">Velocitys konfigurationsreference</a>. Forbindelsen videre fra din Velocity til Paper bruger fortsat din egen forwarding-konfiguration, eksempelvis modern med proxyens egen <code>forwarding.secret</code>. Se <a href="/docs/serveropsaetning#velocity">Velocity → Paper</a>.</p>
+  <p data-i18n-html="article.eksterne-servere.text39" set:html={t("en", "article.eksterne-servere.text39")} />
 
   </section>
   <section id="proxy-waterfall" aria-labelledby="proxy-waterfall-tab">
-  <h3 id="waterfall-haproxy">MineClub → Waterfall → Paper</h3>
-  <p>Waterfall bruger JVM-argumentet <code>waterfall.auth.url</code>. Adressen skal indeholde formatfelterne til brugernavn, server-ID og den valgfrie IP-parameter. Det fremgår af <a href="https://github.com/PaperMC/Waterfall/blob/master/BungeeCord-Patches/0051-Add-auth-url-option.patch">Waterfalls officielle auth-url-patch</a>.</p>
-  <p><strong>Terminal — Waterfall-proxyen:</strong> Stop proxyen, og start med følgende kommando. Tilpas JAR-navnet; behold anførselstegnene omkring JVM-argumentet, så shellen ikke fortolker <code>&amp;</code>.</p>
+  <h3 id="waterfall-haproxy" data-i18n-html="article.eksterne-servere.text40" set:html={t("en", "article.eksterne-servere.text40")} />
+  <p data-i18n-html="article.eksterne-servere.text41" set:html={t("en", "article.eksterne-servere.text41")} />
+  <p data-i18n-html="article.eksterne-servere.text42" set:html={t("en", "article.eksterne-servere.text42")} />
   <pre><code>java "-Dwaterfall.auth.url=https://api.mineclub.dk/v2/session/minecraft/hasJoined?username=%s&amp;serverId=%s%s" -jar waterfall.jar</code></pre>
-  <p>De tre <code>%s</code>-felter erstattes af Waterfall. I en Windows <code>.bat</code>- eller <code>.cmd</code>-fil skal hvert procenttegn dobles, så URL-delen bliver <code>?username=%%s&amp;serverId=%%s%%s</code>. Brug almindelige <code>%s</code> i PowerShell og Linux/macOS-terminalen.</p>
-  <p><strong>På Waterfall-proxyen — <code>config.yml</code>:</strong> Behold <code>online_mode</code> i roden, og aktivér <code>proxy_protocol</code> på den eksisterende listener, som MineClub forbinder til. Bevar dens øvrige indstillinger.</p>
+  <p data-i18n-html="article.eksterne-servere.text43" set:html={t("en", "article.eksterne-servere.text43")} />
+  <p data-i18n-html="article.eksterne-servere.text44" set:html={t("en", "article.eksterne-servere.text44")} />
   <pre><code>online_mode: true
 listeners:
   - host: 0.0.0.0:25565
     proxy_protocol: true</code></pre>
-  <p><code>proxy_protocol</code> er en listener-indstilling i <a href="https://github.com/SpigotMC/BungeeCord/blob/master/proxy/src/main/java/net/md_5/bungee/conf/YamlConfig.java">BungeeCord-konfigurationen, som Waterfall bygger på</a>. <code>ip_forward: true</code> gælder den separate forbindelse videre til Paper og erstatter ikke <code>proxy_protocol</code>. Behold backend-opsætningen fra <a href="/docs/serveropsaetning#waterfall">Waterfall → Paper</a>.</p>
+  <p data-i18n-html="article.eksterne-servere.text45" set:html={t("en", "article.eksterne-servere.text45")} />
   </section>
   </div>
-  <blockquote><p>HAProxy overfører forbindelsesoplysninger; sessionsadressen håndterer login-kontrollen. Begge dele skal være sat op. Begræns proxyens HAProxy-port til MineClubs betroede kildeadresser, og test ved at tilslutte gennem MineClub. En almindelig Minecraft-klient sender ikke den krævede PROXY-header direkte til denne port.</p></blockquote>
-  <p>Genstart hele proxyprocessen efter ændring af JVM-argumenter eller konfiguration. Kontrollér derefter login, spillerens UUID og adgang til din Paper-backend gennem MineClub. Opskrifterne er baseret på konfiguration og kildekode; de er ikke en live-test af din konkrete proxy-build.</p>
+  <blockquote><p data-i18n-html="article.eksterne-servere.text46" set:html={t("en", "article.eksterne-servere.text46")} /></blockquote>
+  <p data-i18n-html="article.eksterne-servere.text47" set:html={t("en", "article.eksterne-servere.text47")} />
 
-  <h2 id="godkendelse">4. Test og send til godkendelse</h2>
-  <p>Start serveren hos din udbyder, og sæt status til <strong>Online</strong> med <code>/sm set online true</code> eller via <strong>Indstillinger → Status på Mineclub → Online → Gem indstillinger</strong> på hjemmesiden. Det gælder også i testfasen.</p>
-  <p>Med en komplet IP-adresse og port kan ejeren teste adgang før godkendelse; staff med den relevante adgang kan også teste. Kontrollér forbindelse, spilleridentitet og serverlog, inden du sender serveren ind. En komplet adresse er ikke i sig selv bevis på, at serveren kan nås.</p>
-  <p><strong>Online er ikke det samme som godkendt.</strong> Almindelige spillere kan begynde at tilslutte, når serveren både er Online, har en gyldig forbindelse og er godkendt (<code>verified</code>). Online-status alene åbner ikke en kladde eller afvist server for alle.</p>
-  <p>Gem alle ændringer, og tryk <strong>Send til godkendelse</strong> under <strong>Godkendelse</strong> i panelet. Du kan også sende den ind fra ejerens Minecraft-konto i spillet:</p>
+  <h2 id="godkendelse" data-i18n-html="article.eksterne-servere.text48" set:html={t("en", "article.eksterne-servere.text48")} />
+  <p data-i18n-html="article.eksterne-servere.text49" set:html={t("en", "article.eksterne-servere.text49")} />
+  <p data-i18n-html="article.eksterne-servere.text50" set:html={t("en", "article.eksterne-servere.text50")} />
+  <p data-i18n-html="article.eksterne-servere.text51" set:html={t("en", "article.eksterne-servere.text51")} />
+  <p data-i18n-html="article.eksterne-servere.text52" set:html={t("en", "article.eksterne-servere.text52")} />
   <pre><code>/sm external submit MinServer</code></pre>
-  <p>Se dine eksterne serveres status og eventuelle begrundelse med:</p>
+  <p data-i18n-html="article.eksterne-servere.text53" set:html={t("en", "article.eksterne-servere.text53")} />
   <pre><code>/sm external</code></pre>
   <ul>
-    <li><strong>Kladde (<code>draft</code>):</strong> Konfigurér og test serveren, og send den til godkendelse.</li>
-    <li><strong>Afventer godkendelse (<code>pending</code>):</strong> Serveren er indsendt. Du kan ikke indsende den igen, mens den afventer.</li>
-    <li><strong>Godkendt (<code>verified</code>):</strong> Serveren kan være offentligt tilgængelig på MineClub, når ejer og forbindelse er gyldige. Den skal stadig være korrekt konfigureret og køre hos dig.</li>
-    <li><strong>Afvist (<code>rejected</code>):</strong> Læs begrundelsen, ret problemet, gem og test. Vælg <strong>Send til godkendelse igen</strong>, eller brug submit-kommandoen.</li>
+    <li data-i18n-html="article.eksterne-servere.text54" set:html={t("en", "article.eksterne-servere.text54")} />
+    <li data-i18n-html="article.eksterne-servere.text55" set:html={t("en", "article.eksterne-servere.text55")} />
+    <li data-i18n-html="article.eksterne-servere.text56" set:html={t("en", "article.eksterne-servere.text56")} />
+    <li data-i18n-html="article.eksterne-servere.text57" set:html={t("en", "article.eksterne-servere.text57")} />
   </ul>
-  <blockquote><p>Ændrer du IP-adresse eller port, nulstilles godkendelsen til <strong>Kladde</strong>. Test den nye forbindelse og indsend serveren igen. Det gælder også en allerede godkendt server.</p></blockquote>
+  <blockquote><p data-i18n-html="article.eksterne-servere.text58" set:html={t("en", "article.eksterne-servere.text58")} /></blockquote>
 
-  <h2 id="fejlfinding">Fejlfinding</h2>
+  <h2 id="fejlfinding" data-i18n-html="article.eksterne-servere.text59" set:html={t("en", "article.eksterne-servere.text59")} />
   <ul>
-    <li><strong>Knappen er deaktiveret:</strong> Vælg ejerens Minecraft-konto, gem ændringerne og kontrollér IP/port. Kun kladder og afviste servere kan indsendes.</li>
-    <li><strong>IP-adressen afvises:</strong> Brug en IPv4- eller IPv6-adresse, ikke et domænenavn. Skriv porten i det separate felt.</li>
-    <li><strong>Forbindelsen fejler:</strong> Kontrollér serverprocessen, lytteporten, firewall og forwarding. Den viste Online-status starter ikke serveren.</li>
-    <li><strong>Forkert nøgle eller forwarding-fejl:</strong> Match panelets protokol og nøgle med modtagerserveren, og genstart efter filændringer.</li>
-    <li><strong>Ejeren kan tilslutte, men andre kan ikke:</strong> Kontrollér godkendelsesstatus. Ejerens testadgang betyder ikke, at serveren er offentligt godkendt.</li>
-    <li><strong>Status er ændret under indsendelse:</strong> Opdatér panelet og læs den aktuelle status, før du prøver igen.</li>
+    <li data-i18n-html="article.eksterne-servere.text60" set:html={t("en", "article.eksterne-servere.text60")} />
+    <li data-i18n-html="article.eksterne-servere.text61" set:html={t("en", "article.eksterne-servere.text61")} />
+    <li data-i18n-html="article.eksterne-servere.text62" set:html={t("en", "article.eksterne-servere.text62")} />
+    <li data-i18n-html="article.eksterne-servere.text63" set:html={t("en", "article.eksterne-servere.text63")} />
+    <li data-i18n-html="article.eksterne-servere.text64" set:html={t("en", "article.eksterne-servere.text64")} />
+    <li data-i18n-html="article.eksterne-servere.text65" set:html={t("en", "article.eksterne-servere.text65")} />
   </ul>
-  <p>Ved fjernelse i panelet slettes registreringen fra MineClub. Serveren og dens filer hos din udbyder bliver ikke slettet.</p>
+  <p data-i18n-html="article.eksterne-servere.text66" set:html={t("en", "article.eksterne-servere.text66")} />
 </DocsLayout>
 
 <script>
